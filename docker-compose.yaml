@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: ./server
+      target: dev
+    ports:
+      - '8000:8000'
+    restart: always
+    tty: true
+    depends_on:
+      - db
+    volumes:
+      - ./server:/opt/app/server:delegated
+      - server-extentions-volume:~/.vscode-server/extensions:delegated
+      - server-extentions-volume-insiders:~/.vscode-server-insiders/extensions:delegated
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: blog
+    ports:
+      - '3306:3306'
+    volumes:
+      - db-volume:/var/lib/mysql
+
+volumes:
+  db-volume:
+  server-extentions-volume:
+  server-extentions-volume-insiders:
