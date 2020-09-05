@@ -1,8 +1,13 @@
 from typing import Optional
 
 from fastapi import FastAPI
+from tortoise.contrib.fastapi import register_tortoise
+
+from .configs.db import DB_CONFIG
 
 app = FastAPI()
+
+register_tortoise(app, DB_CONFIG)
 
 
 @app.get("/")
