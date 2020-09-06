@@ -1,22 +1,22 @@
-DB_CONFIG = {
-    "connections": {
-        # Dict format for connection
-        "default": {
-            "engine": "tortoise.backends.mysql",
-            "credentials": {
-                "host": "db",
-                "port": "3306",
-                "user": "root",
-                "password": "root",
-                "database": "blog",
-            },
-        },
-    },
-    "apps": {
-        "models": {
-            "models": ["apps.models"],
-            # If no default_connection specified, defaults to 'default'
-            "default_connection": "default",
-        }
-    },
-}
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+
+MYSQL_DATABASE_URL = "mysql://root:root@db/blog"
+
+engine = create_engine(MYSQL_DATABASE_URL)
+
+# Create DB Session
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Create ORM DB Base Model
+Base = declarative_base()
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
