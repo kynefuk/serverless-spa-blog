@@ -1,14 +1,14 @@
 {
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
-  "python.linting.flake8Args": [
-    "--ignore=E501,E231,F401,F403,W503",
-    "max-line-length=100"
-  ],
   "python.formatting.provider": "black",
   "python.linting.enabled": true,
   "python.linting.lintOnSave": true,
   "editor.formatOnSave": true,
+  "python.linting.flake8Args": [
+    "--ignore=E231,W503",
+    "max-line-length=100",
+  ],
   "[python]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": true

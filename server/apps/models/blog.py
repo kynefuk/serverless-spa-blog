@@ -5,17 +5,6 @@ from sqlalchemy.dialects.mysql import LONGTEXT
 from ..configs.db import Base
 
 
-class User(Base):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
-    name = Column(String(50))
-    email = Column(String(255), unique=True, index=True)
-    password = Column(String(30))
-
-    blogs = relationship("Blog", back_populates="owner")
-
-
 class Blog(Base):
     __tablename__ = "blogs"
 

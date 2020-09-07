@@ -31,8 +31,7 @@
   // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
   // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
   "mounts": [
-    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-    "source=server-extentions-volume,target=/app-user/.vscode-server/extensions,type=volume"
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
   ]
 
   // Uncomment the next line if you want start specific services in your Docker Compose config.

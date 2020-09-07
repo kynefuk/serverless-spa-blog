@@ -9,10 +9,6 @@ class BlogBase(BaseModel):
     content: str
 
 
-class BlogCreate(BlogBase):
-    pass
-
-
 class Blog(BlogBase):
     id: int
     owner_id: int
@@ -23,14 +19,14 @@ class Blog(BlogBase):
         orm_mode = True
 
 
+class BlogCreate(BlogBase):
+    pass
+
+
 # Pydantic models to have common attributes while creating or reading data.
 class UserBase(BaseModel):
     name: str
     email: str
-
-
-class UserCreate(UserBase):
-    password: str
 
 
 class User(UserBase):
@@ -40,3 +36,20 @@ class User(UserBase):
     #  Config class is used to provide configurations to Pydantic.
     class Config:
         orm_mode = True
+
+
+class UserInDB(User):
+    hashed_password: str
+
+
+class UserCreate(UserBase):
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
