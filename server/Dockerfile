@@ -27,4 +27,4 @@ RUN apt update \
 COPY . /opt/app/server
 WORKDIR /opt/app/server
 ENV PYTHONBUFFERED=TRUE
-EXPOSE 8000
+EXPOSE 7000
