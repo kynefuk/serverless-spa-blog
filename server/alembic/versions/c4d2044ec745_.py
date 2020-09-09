@@ -1,7 +1,7 @@
 """empty message
 
 Revision ID: c4d2044ec745
-Revises: 
+Revises:
 Create Date: 2020-09-09 11:36:08.974848
 
 """

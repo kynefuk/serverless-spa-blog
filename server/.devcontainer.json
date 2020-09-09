@@ -1,0 +1,8 @@
+{
+	"name": "Container 1",
+	"dockerComposeFile": ["../docker-compose.yaml"],
+	"service": "app",
+	"workspaceFolder": "/opt/app/server",
+	"extensions": ["ms-python.python"],
+	"shutdownAction": "none"
+}
