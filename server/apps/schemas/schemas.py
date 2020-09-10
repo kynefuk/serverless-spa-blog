@@ -38,10 +38,6 @@ class User(UserBase):
         orm_mode = True
 
 
-class UserInDB(User):
-    hashed_password: str
-
-
 class UserCreate(UserBase):
     password: str
 

@@ -33,7 +33,7 @@ def get_users(session: Session, skip: int = 0, limit: int = 100):
 
 
 def create(session: Session, user: schemas.UserCreate):
-    hashed_password = hashlib.sha256(user.password.encode()).hexdigest()
+    hashed_password = pwd_context.hash(user.password)
     user = User(name=user.name, email=user.email, password=hashed_password)
     session.add(user)
     session.commit()
@@ -41,26 +41,25 @@ def create(session: Session, user: schemas.UserCreate):
     return user
 
 
+def get_user(session: Session, username: str):
+    return session.query(User).filter(User.name == username).first()
+
+
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
-
-
-def get_password_hash(plain_password):
-    return pwd_context.hash(plain_password)
-
-
-def get_user(session: Session, username: str):
-    user = session.query(User).filter(User.name == username).first()
-    return schemas.UserInDB(**user)
 
 
 def authenticate_user(session, username: str, password: str):
     user = get_user(session, username)
     if not user:
         return False
-    if not verify_password(password, user.hashed_password):
+    if not verify_password(password, user.password):
         return False
     return user
+
+
+def get_password_hash(plain_password):
+    return pwd_context.hash(plain_password)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
@@ -109,18 +108,19 @@ async def login_for_access_token(
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.name}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+# Authorization Header Bearer
 @router.get("/users/me/", response_model=schemas.User)
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
 
 
 @router.get("/users/", response_model=List[schemas.User])
-def list_users(skip: int = 0, limit: int = 0, session: Session = Depends(get_db)):
+def list_users(skip: int = 0, limit: int = 100, session: Session = Depends(get_db)):
     return get_users(session, skip=skip, limit=limit)
 
 
