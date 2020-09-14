@@ -15,7 +15,8 @@ COPY --from=builder /usr/local/bin/uvicorn /usr/local/bin/uvicorn
 COPY . /opt/app/server
 WORKDIR /opt/app/server
 ENV PYTHONBUFFERED=TRUE
-EXPOSE 8000
+EXPOSE 7000
+CMD [ "uvicorn", "apps:main", "--host", "0.0.0.0", "--port", "7000", "--workers", "4", "--reload" ]
 
 
 FROM builder AS runner
