@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 
-from .configs.db import Base, engine
 from .configs.cors import origins
+from .configs.db import Base, engine
 from .routers import routers
 
 Base.metadata.create_all(bind=engine)
@@ -20,3 +21,6 @@ app.add_middleware(
     allow_methods=["options", "get", "post", "put", "delete"],
     allow_headers=["*"],
 )
+
+# FastAPIのインスタンスをMangumのコンストラクタに渡して、handlerとして外から読めるようにしておく
+handler = Mangum(app, False)
