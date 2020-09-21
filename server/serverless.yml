@@ -5,6 +5,7 @@ provider:
   name: aws
   runtime: python3.8
   stage: dev
+  profile: serverless
   region: ap-northeast-1
   timeout: 300
   logRetentionInDays: 7
@@ -29,7 +30,6 @@ provider:
 #  environment:
 #    variable1: value1
 
-you can add packaging information here
 package:
   exclude:
     - .vscode
@@ -52,54 +52,197 @@ functions:
           method: ANY
           private: false
           cors: true
-#    The following are a few example events you can configure
-#    NOTE: Please make sure to change your handler code to work with those events
-#    Check the event documentation for details
-#    events:
-#      - http:
-#          path: users/create
-#          method: get
-#      - websocket: $connect
-#      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
-#      - sns: greeter-topic
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
-#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
-#      - iot:
-#          sql: "SELECT * FROM 'some_topic'"
-#      - cloudwatchEvent:
-#          event:
-#            source:
-#              - "aws.ec2"
-#            detail-type:
-#              - "EC2 Instance State-change Notification"
-#            detail:
-#              state:
-#                - pending
-#      - cloudwatchLog: '/aws/lambda/hello'
-#      - cognitoUserPool:
-#          pool: MyUserPool
-#          trigger: PreSignUp
-#      - alb:
-#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
-#          priority: 1
-#          conditions:
-#            host: example.com
-#            path: /hello
 
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
+custom: ${file(./.env.yml)}
 
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+resources:
+  Resources:
+    SampleVPC:
+      Type: AWS::EC2::VPC
+      DeletionPolicy: Delete
+      Properties:
+        CidrBlock: 10.0.0.0/16
+        Tags:
+          - Key: Name
+            Value: SampleVPC
+    
+    SampleInternetGateway:
+      Type: AWS::EC2::InternetGateway
+      Properties:
+        Tags:
+          - Key: Name
+            Value: SampleInternetGateway
+    
+    VPCGatewayAttachment:
+      Type: AWS::EC2::VPCGatewayAttachment
+      Properties:
+        VpcId: 
+          Ref: SampleVPC
+        InternetGatewayId: 
+          Ref: SampleInternetGateway
+    
+    SampleElasticIp:
+      Type: AWS::EC2::EIP
+      Properties:
+        Domain: vpc
+    
+    SamplePublicSubnet1a:
+      DependsOn: [SampleVPC]
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId: 
+          Ref: SampleVPC
+        CidrBlock: 10.0.1.0/24
+        Tags:
+          - Key: Name
+            Value: SamplePublicSubnet1a
+    
+    SamplePublicSubnet1c:
+      DependsOn: [SampleVPC]
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId: 
+          Ref: SampleVPC
+        CidrBlock: 10.0.2.0/24
+        Tags:
+          - Key: Name
+            Value: SamplePublicSubnet1c
+
+    SamplePrivateSubnet1a:
+      DependsOn: [SampleVPC]
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId: 
+          Ref: SampleVPC
+        AvailabilityZone: ap-northeast-1a
+        CidrBlock: 10.0.3.0/24
+        Tags:
+          - Key: Name
+            Value: SamplePrivateSubnet1a
+    
+    SamplePrivateSubnet1c:
+      DependsOn: [SampleVPC]
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId: 
+          Ref: SampleVPC
+        AvailabilityZone: ap-northeast-1c
+        CidrBlock: 10.0.4.0/24
+        Tags:
+          - Key: Name
+            Value: SamplePrivateSubnet1c
+    
+    SamplePublicRouteTable:
+      Type: AWS::EC2::RouteTable
+      Properties:
+        VpcId: 
+          Ref: SampleVPC
+        Tags:
+          - Key: Name
+            Value: SamplePublicRouteTable
+
+    SamplePublicRoute:
+      Type: AWS::EC2::Route
+      Properties:
+        RouteTableId: 
+          Ref: SamplePublicRouteTable
+        DestinationCidrBlock: 0.0.0.0/0
+        GatewayId: 
+          Ref: SampleInternetGateway
+
+    SubnetRouteTableAssociationPublicSubnet1a:
+      Type: AWS::EC2::SubnetRouteTableAssociation
+      Properties:
+        SubnetId: 
+          Ref: SamplePublicSubnet1a
+        RouteTableId: 
+          Ref: SamplePublicRouteTable
+
+    SubnetRouteTableAssociationPublicSubnet1c:
+      Type: AWS::EC2::SubnetRouteTableAssociation
+      Properties:
+        SubnetId: 
+          Ref: SamplePublicSubnet1c
+        RouteTableId: 
+          Ref: SamplePublicRouteTable
+    
+    SampleApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      DeletionPolicy: Delete
+      Properties:
+        EndpointConfiguration:
+          Types:
+            - REGIONAL
+        Name: SampleApiGatewayRestApi
+    
+    SampleSGForDB:
+      DependsOn: SampleVPC
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: SecurityGroup for DB
+        GroupName: SampleSGForDB
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 3306
+            ToPort: 3306
+            SourceSecurityGroupId:
+              Ref: SampleSGForLambda
+        VpcId:
+          Ref: SampleVPC
+    
+    SampleSGForLambda:
+      DependsOn: SampleVPC
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: SecurityGroup for Lambda
+        GroupName: SampleSGForLambda
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 443
+            ToPort: 443
+            CidrIp: 0.0.0.0/0
+        VpcId: 
+          Ref: SampleVPC
+
+    SampleDBSubnetGroup:
+      Type: AWS::RDS::DBSubnetGroup
+      Properties:
+        DBSubnetGroupDescription: SampleDBSubnetGroup
+        SubnetIds:
+          - !Ref SamplePrivateSubnet1a
+          - !Ref SamplePrivateSubnet1c
+
+    SampleDBParameterGroup:
+      Type: AWS::RDS::DBClusterParameterGroup
+      Properties:
+        Description: Sample Parameter Group for Aurora Serverless
+        Family: aurora5.6
+        Parameters:
+          server_audit_logging: 0
+
+    SampleDBCluster:
+      DependsOn: SampleDBSubnetGroup
+      Type: AWS::RDS::DBCluster
+      Properties:
+        DBClusterIdentifier: SampleDBCluster
+        DatabaseName: blog
+        DBSubnetGroupName:
+          Ref: SampleDBSubnetGroup
+        DBClusterParameterGroupName:
+          Ref: SampleDBParameterGroup
+        DeletionProtection: false
+        Engine: aurora
+        EngineMode: serverless
+        EngineVersion: 5.6.10a
+        StorageEncrypted: true
+        EnableHttpEndpoint: true
+        ScalingConfiguration:
+          MinCapacity: 1
+          AutoPause: true
+          MaxCapacity: 2
+          SecondsUntilAutoPause: 1800
+        MasterUsername: ${self:custom.SampleMasterUsername}
+        MasterUserPassword: ${self:custom.SampleMasterUserPassword}
+        Port: 3306
+        VpcSecurityGroupIds:
+          - !Ref SampleSGForDB
