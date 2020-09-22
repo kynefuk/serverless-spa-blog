@@ -23,4 +23,4 @@ app.add_middleware(
 )
 
 # FastAPIのインスタンスをMangumのコンストラクタに渡して、handlerとして外から読めるようにしておく
-handler = Mangum(app, False)
+handler = Mangum(app)

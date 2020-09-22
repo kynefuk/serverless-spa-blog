@@ -1,7 +1,7 @@
 FROM python:3.8-buster AS builder
 WORKDIR /opt/app/server
-COPY requirements.lock /opt/app/server/requirements.lock
-RUN pip install -r requirements.lock
+COPY requirements.txt /opt/app/server/requirements.txt
+RUN pip install -r requirements.txt
 
 FROM builder AS dev
 RUN apt-get update \

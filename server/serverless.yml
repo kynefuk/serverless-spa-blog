@@ -7,24 +7,30 @@ provider:
   stage: dev
   profile: serverless
   region: ap-northeast-1
+  vpc:
+    subnetIds:
+      - !Ref SamplePublicSubnet1a
+      - !Ref SamplePublicSubnet1c
+    securityGroupIds:
+      - !Ref SampleSGForLambda
   timeout: 300
   logRetentionInDays: 7
 
 # you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+#   iamRoleStatements:
+#     - Effect: "Allow"
+#       Action:
+#         - "s3:ListBucket"
+#       Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#     - Effect: "Allow"
+#       Action:
+#         - "s3:PutObject"
+#       Resource:
+#         Fn::Join:
+#           - ""
+#           - - "arn:aws:s3:::"
+#             - "Ref" : "ServerlessDeploymentBucket"
+#             - "/*"
 
 # you can define service wide environment variables here
 #  environment:
@@ -52,8 +58,15 @@ functions:
           method: ANY
           private: false
           cors: true
+    environment:
+      MYSQL_DATABASE_URL: ${self:custom.envFile.SampleDBURL}
 
-custom: ${file(./.env.yml)}
+custom:
+  defaultStage: dev
+  envFile: ${file(./.env.yml)}
+  pythonRequirements:
+    dockerizePip: false
+    usePoetry: false
 
 resources:
   Resources:
@@ -65,43 +78,43 @@ resources:
         Tags:
           - Key: Name
             Value: SampleVPC
-    
+
     SampleInternetGateway:
       Type: AWS::EC2::InternetGateway
       Properties:
         Tags:
           - Key: Name
             Value: SampleInternetGateway
-    
+
     VPCGatewayAttachment:
       Type: AWS::EC2::VPCGatewayAttachment
       Properties:
-        VpcId: 
+        VpcId:
           Ref: SampleVPC
-        InternetGatewayId: 
+        InternetGatewayId:
           Ref: SampleInternetGateway
-    
+
     SampleElasticIp:
       Type: AWS::EC2::EIP
       Properties:
         Domain: vpc
-    
+
     SamplePublicSubnet1a:
       DependsOn: [SampleVPC]
       Type: AWS::EC2::Subnet
       Properties:
-        VpcId: 
+        VpcId:
           Ref: SampleVPC
         CidrBlock: 10.0.1.0/24
         Tags:
           - Key: Name
             Value: SamplePublicSubnet1a
-    
+
     SamplePublicSubnet1c:
       DependsOn: [SampleVPC]
       Type: AWS::EC2::Subnet
       Properties:
-        VpcId: 
+        VpcId:
           Ref: SampleVPC
         CidrBlock: 10.0.2.0/24
         Tags:
@@ -112,30 +125,30 @@ resources:
       DependsOn: [SampleVPC]
       Type: AWS::EC2::Subnet
       Properties:
-        VpcId: 
+        VpcId:
           Ref: SampleVPC
         AvailabilityZone: ap-northeast-1a
         CidrBlock: 10.0.3.0/24
         Tags:
           - Key: Name
             Value: SamplePrivateSubnet1a
-    
+
     SamplePrivateSubnet1c:
       DependsOn: [SampleVPC]
       Type: AWS::EC2::Subnet
       Properties:
-        VpcId: 
+        VpcId:
           Ref: SampleVPC
         AvailabilityZone: ap-northeast-1c
         CidrBlock: 10.0.4.0/24
         Tags:
           - Key: Name
             Value: SamplePrivateSubnet1c
-    
+
     SamplePublicRouteTable:
       Type: AWS::EC2::RouteTable
       Properties:
-        VpcId: 
+        VpcId:
           Ref: SampleVPC
         Tags:
           - Key: Name
@@ -144,28 +157,28 @@ resources:
     SamplePublicRoute:
       Type: AWS::EC2::Route
       Properties:
-        RouteTableId: 
+        RouteTableId:
           Ref: SamplePublicRouteTable
         DestinationCidrBlock: 0.0.0.0/0
-        GatewayId: 
+        GatewayId:
           Ref: SampleInternetGateway
 
     SubnetRouteTableAssociationPublicSubnet1a:
       Type: AWS::EC2::SubnetRouteTableAssociation
       Properties:
-        SubnetId: 
+        SubnetId:
           Ref: SamplePublicSubnet1a
-        RouteTableId: 
+        RouteTableId:
           Ref: SamplePublicRouteTable
 
     SubnetRouteTableAssociationPublicSubnet1c:
       Type: AWS::EC2::SubnetRouteTableAssociation
       Properties:
-        SubnetId: 
+        SubnetId:
           Ref: SamplePublicSubnet1c
-        RouteTableId: 
+        RouteTableId:
           Ref: SamplePublicRouteTable
-    
+
     SampleApiGatewayRestApi:
       Type: AWS::ApiGateway::RestApi
       DeletionPolicy: Delete
@@ -174,7 +187,7 @@ resources:
           Types:
             - REGIONAL
         Name: SampleApiGatewayRestApi
-    
+
     SampleSGForDB:
       DependsOn: SampleVPC
       Type: AWS::EC2::SecurityGroup
@@ -189,7 +202,7 @@ resources:
               Ref: SampleSGForLambda
         VpcId:
           Ref: SampleVPC
-    
+
     SampleSGForLambda:
       DependsOn: SampleVPC
       Type: AWS::EC2::SecurityGroup
@@ -201,7 +214,7 @@ resources:
             FromPort: 443
             ToPort: 443
             CidrIp: 0.0.0.0/0
-        VpcId: 
+        VpcId:
           Ref: SampleVPC
 
     SampleDBSubnetGroup:
@@ -241,8 +254,10 @@ resources:
           AutoPause: true
           MaxCapacity: 2
           SecondsUntilAutoPause: 1800
-        MasterUsername: ${self:custom.SampleMasterUsername}
-        MasterUserPassword: ${self:custom.SampleMasterUserPassword}
+        MasterUsername: ${self:custom.envFile.SampleMasterUsername}
+        MasterUserPassword: ${self:custom.envFile.SampleMasterUserPassword}
         Port: 3306
         VpcSecurityGroupIds:
           - !Ref SampleSGForDB
+plugins:
+  - serverless-python-requirements

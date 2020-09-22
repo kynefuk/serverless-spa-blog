@@ -13,8 +13,7 @@ services:
     volumes:
       - ./server:/opt/app/server:delegated
   db:
-    image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
+    image: mysql:5.6
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: blog

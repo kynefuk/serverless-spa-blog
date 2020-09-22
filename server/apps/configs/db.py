@@ -1,10 +1,12 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-
 from sqlalchemy.orm import sessionmaker
 
-
-MYSQL_DATABASE_URL = "mysql://root:root@db/blog"
+MYSQL_DATABASE_URL = os.environ.get(
+    "MYSQL_DATABASE_URL", "mysql+pymysql://root:root@db/blog"
+)
 
 engine = create_engine(MYSQL_DATABASE_URL)
 
