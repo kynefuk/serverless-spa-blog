@@ -20,3 +20,6 @@ var/
 # Serverless directories
 .serverless
 node_modules
+
+# Frontend
+web/node_modules
