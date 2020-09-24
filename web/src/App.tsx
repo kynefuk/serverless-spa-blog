@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import SimpleMED from 'react-simplemde-editor';
+import 'easymde/dist/easymde.min.css';
+import marked from 'marked';
+import highlight from 'highlightjs';
+import 'highlightjs/styles/docco.css';
+
+marked.setOptions({
+  highlight: function (code, lang) {
+    return highlight.highlightAuto(code, [lang]).value;
+  },
+});
 
 function App() {
+  const [markdown, setMarkdown] = useState('');
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <SimpleMED onChange={(e) => setMarkdown(e)} />
+      <div id='body'>
+        <span dangerouslySetInnerHTML={{ __html: marked(markdown) }} />
+      </div>
     </div>
   );
 }
