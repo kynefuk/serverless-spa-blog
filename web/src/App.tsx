@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import SimpleMED from 'react-simplemde-editor';
+import React from 'react';
 import 'easymde/dist/easymde.min.css';
 import marked from 'marked';
 import highlight from 'highlightjs';
@@ -18,7 +17,6 @@ marked.setOptions({
 });
 
 function App() {
-  const [markdown, setMarkdown] = useState('');
   return (
     <div className='App'>
       <Switch>
@@ -31,14 +29,15 @@ function App() {
             <Route path='/create' exact component={Editor} />
           </Switch>
         </Auth>
+        <Redirect to='/' />
       </Switch>
-
-      <SimpleMED onChange={(e) => setMarkdown(e)} />
-      <div id='body'>
-        <span dangerouslySetInnerHTML={{ __html: marked(markdown) }} />
-      </div>
     </div>
   );
 }
 
 export default App;
+
+/* <SimpleMED onChange={(e) => setMarkdown(e)} />
+  <div id='body'>
+    <span dangerouslySetInnerHTML={{ __html: marked(markdown) }} />
+  </div> */
