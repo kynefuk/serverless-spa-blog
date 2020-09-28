@@ -60,6 +60,7 @@ functions:
           cors: true
     environment:
       MYSQL_DATABASE_URL: ${self:custom.envFile.SampleDBURL}
+      SECRET_KEY: ${self:custom.envFile.SecretKey}
 
 custom:
   defaultStage: dev

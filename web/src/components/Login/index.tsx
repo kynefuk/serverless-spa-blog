@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DefaultApi } from '../../api/api';
 import {
   Button,
@@ -35,7 +35,25 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const api = new DefaultApi();
-  api.loginForAccessTokenTokenPost();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const changeUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    setUsername(value);
+  };
+
+  const changePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    setPassword(value);
+  };
+
+  const handleOnSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const response = await api.loginForAccessTokenTokenPost(username, password);
+    console.log(response);
+  };
+
   const classes = useStyles();
 
   return (
@@ -59,6 +77,9 @@ const Login = () => {
             name='email'
             autoComplete='email'
             autoFocus
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              changeUsernameInput(e)
+            }
           />
           <TextField
             variant='outlined'
@@ -70,6 +91,9 @@ const Login = () => {
             type='password'
             id='password'
             autoComplete='current-password'
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              changePasswordInput(e)
+            }
           />
           <Button
             type='submit'
@@ -77,6 +101,9 @@ const Login = () => {
             variant='contained'
             color='primary'
             className={classes.submit}
+            onClick={(e: React.FormEvent<HTMLButtonElement>) =>
+              handleOnSubmit(e)
+            }
           >
             Sign In
           </Button>

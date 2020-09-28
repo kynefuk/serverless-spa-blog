@@ -1,4 +1,5 @@
 import hashlib
+import os
 from datetime import datetime, timedelta
 from typing import List, Optional
 
@@ -14,11 +15,13 @@ from ..schemas import schemas
 
 router = APIRouter()
 
-# to get a string like this run:
 # openssl rand -hex 32
-SECRET_KEY = "18cd8d674472ad2af474a3e4d5dd9aa97eaf6cc246e8242aeb24e358ba320f34"
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY", "18cd8d674472ad2af474a3e4d5dd9aa97eaf6cc246e8242aeb24e358ba320f34"
+)
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
+print(SECRET_KEY)
 
 pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
