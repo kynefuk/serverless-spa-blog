@@ -12,6 +12,8 @@ import {
   CssBaseline,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { useAccessTokenContext } from '../../context/index';
+import { AccessTokenActionType } from '../../action/type';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,6 +39,7 @@ const Login = () => {
   const api = new DefaultApi();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { dispatchAccessToken } = useAccessTokenContext();
 
   const changeUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
@@ -50,8 +53,13 @@ const Login = () => {
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     const response = await api.loginForAccessTokenTokenPost(username, password);
-    console.log(response);
+    console.log(response.data.access_token);
+    dispatchAccessToken({
+      type: AccessTokenActionType.ADD,
+      payload: response.data.access_token,
+    });
   };
 
   const classes = useStyles();
@@ -72,10 +80,10 @@ const Login = () => {
             margin='normal'
             required
             fullWidth
-            id='email'
-            label='Email Address'
-            name='email'
-            autoComplete='email'
+            id='username'
+            label='Username'
+            name='username'
+            autoComplete='username'
             autoFocus
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               changeUsernameInput(e)

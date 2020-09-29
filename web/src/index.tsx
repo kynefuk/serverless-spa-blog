@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { HashRouter } from 'react-router-dom';
+import { AppContext } from './context/index';
 
 ReactDOM.render(
   <React.StrictMode>
-    <HashRouter hashType={'slash'}>
-      <App />
-    </HashRouter>
+    <AppContext>
+      <HashRouter hashType={'slash'}>
+        <App />
+      </HashRouter>
+    </AppContext>
   </React.StrictMode>,
   document.getElementById('root')
 );
