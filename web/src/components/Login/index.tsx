@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
 import { DefaultApi } from '../../api/api';
 import {
   Button,
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const api = new DefaultApi();
+  const history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { dispatchAccessToken } = useAccessTokenContext();
@@ -55,11 +57,12 @@ const Login = () => {
     e.preventDefault();
 
     const response = await api.loginForAccessTokenTokenPost(username, password);
-    console.log(response.data.access_token);
     dispatchAccessToken({
       type: AccessTokenActionType.ADD,
       payload: response.data.access_token,
     });
+
+    history.push('/');
   };
 
   const classes = useStyles();

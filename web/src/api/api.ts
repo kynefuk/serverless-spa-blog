@@ -134,13 +134,13 @@ export interface Token {
    * @type {string}
    * @memberof Token
    */
-  accessToken: string;
+  access_token: string;
   /**
    *
    * @type {string}
    * @memberof Token
    */
-  tokenType: string;
+  token_type: string;
 }
 /**
  *
