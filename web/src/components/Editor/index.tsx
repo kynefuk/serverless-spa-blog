@@ -7,6 +7,7 @@ import highlight from 'highlightjs';
 import 'highlightjs/styles/docco.css';
 import { Button, makeStyles, TextField } from '@material-ui/core';
 import { useHistory } from 'react-router';
+import { useAccessTokenContext } from '../../context';
 
 marked.setOptions({
   highlight: function (code, lang) {
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 const Editor = () => {
   const api = new DefaultApi();
   const history = useHistory();
+  const { access } = useAccessTokenContext();
   const [title, setTitle] = useState('');
   const [markdown, setMarkdown] = useState('');
 
@@ -34,10 +36,20 @@ const Editor = () => {
   const handleOnSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     // ヘッダにJWTトークンを含める必要がある
-    const response = await api.createBlogBlogsPost({
-      title: title,
-      content: markdown,
-    });
+    const options = {
+      headers: {
+        Authorization: `Bearer ${access}`,
+      },
+    };
+
+    const response = await api.createBlogBlogsPost(
+      {
+        title: title,
+        content: markdown,
+      },
+      options
+    );
+    console.log(response);
     history.push(`/${response.data.id}`);
   };
 
