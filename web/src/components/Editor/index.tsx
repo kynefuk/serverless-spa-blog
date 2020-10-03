@@ -35,7 +35,7 @@ const Editor = () => {
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // ヘッダにJWTトークンを含める必要がある
+
     const options = {
       headers: {
         Authorization: `Bearer ${access}`,

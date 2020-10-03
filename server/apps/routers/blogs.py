@@ -27,6 +27,10 @@ def create(session: Session, blog: schemas.BlogCreate, user_id: int):
     return blog
 
 
+def delete(session: Session, blog_id: int):
+    return session.query(Blog).filter(id=blog_id).delete()
+
+
 @router.get("/blogs/", response_model=List[schemas.Blog])
 def list_blogs(skip: int = 0, limit: int = 0, session: Session = Depends(get_db)):
     return list(skip=skip, limit=limit, session=session)
@@ -39,3 +43,12 @@ def create_blog(
     current_user: User = Depends(get_current_user),
 ):
     return create(session=session, blog=blog, user_id=current_user.id)
+
+
+@router.delete("/blogs/{blog_id}")
+def delete_blog(
+    blog_id: int,
+    session: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return delete(session=session, blog_id=blog_id)
