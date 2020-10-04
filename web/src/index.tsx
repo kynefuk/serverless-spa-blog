@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import * as serviceWorker from './serviceWorker';
 import { HashRouter } from 'react-router-dom';
 import { AppContext } from './context/index';
@@ -10,6 +11,11 @@ ReactDOM.render(
   <React.StrictMode>
     <AppContext>
       <HashRouter hashType={'slash'}>
+        <AppBar position='sticky' color='default'>
+          <Toolbar>
+            <Typography variant='h6'>ブログ</Typography>
+          </Toolbar>
+        </AppBar>
         <App />
       </HashRouter>
     </AppContext>

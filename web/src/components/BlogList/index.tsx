@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DefaultApi } from '../../api/api';
 import { Blog } from '../../api/api';
-import { List, ListItem } from '@material-ui/core';
+import { List, ListItem, Container, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 const BlogList: React.FC = () => {
@@ -11,20 +11,23 @@ const BlogList: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await api.listBlogsBlogsGet(0, 100);
-      console.log(response);
       setBlogs(response.data);
     };
     fetchData();
   }, []);
 
   return (
-    <List>
-      {blogs.map((blog) => (
-        <Link to='/'>
-          <ListItem>{blog.title}</ListItem>
-        </Link>
-      ))}
-    </List>
+    <Container>
+      <Grid container justify='center' alignItems='center'>
+        <List>
+          {blogs.map((blog) => (
+            <Link to={`/${blog.id}`} key={blog.id}>
+              <ListItem>{blog.title}</ListItem>
+            </Link>
+          ))}
+        </List>
+      </Grid>
+    </Container>
   );
 };
 

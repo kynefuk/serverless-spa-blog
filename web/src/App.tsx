@@ -12,10 +12,10 @@ function App() {
       <Switch>
         <Route path='/login' exact component={Login} />
         <Route path='/' exact component={BlogList} />
-        <Route path='/:id(\\d+)' exact component={Blog} />
+        <Route path='/:id(\d+)' exact component={Blog} />
         <Auth>
           <Switch>
-            <Route path='/:id/edit' exact component={Editor} />
+            <Route path='/:id(\d+)/edit' exact component={Editor} />
             <Route path='/create' exact component={Editor} />
           </Switch>
         </Auth>

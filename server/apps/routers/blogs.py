@@ -45,7 +45,12 @@ def create_blog(
     return create(session=session, blog=blog, user_id=current_user.id)
 
 
-@router.delete("/blogs/{blog_id}")
+@router.get("/blogs/{blog_id}/", response_model=schemas.Blog)
+def get_blog(blog_id: int, session: Session = Depends(get_db)):
+    return get(session=session, blog_id=blog_id)
+
+
+@router.delete("/blogs/{blog_id}/")
 def delete_blog(
     blog_id: int,
     session: Session = Depends(get_db),
