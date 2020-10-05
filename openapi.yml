@@ -28,7 +28,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Response List Blogs Blogs Get
+                title: Response List Blogs Blogs  Get
                 type: array
                 items:
                   $ref: '#/components/schemas/Blog'
@@ -54,6 +54,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Blog'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+        - OAuth2PasswordBearer: []
+  '/blogs/{blog_id}/':
+    get:
+      summary: Get Blog
+      operationId: get_blog_blogs__blog_id___get
+      parameters:
+        - required: true
+          schema:
+            title: Blog Id
+            type: integer
+          name: blog_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      summary: Delete Blog
+      operationId: delete_blog_blogs__blog_id___delete
+      parameters:
+        - required: true
+          schema:
+            title: Blog Id
+            type: integer
+          name: blog_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
         '422':
           description: Validation Error
           content:
@@ -123,7 +171,7 @@ paths:
           content:
             application/json:
               schema:
-                title: Response List Users Users Get
+                title: Response List Users Users  Get
                 type: array
                 items:
                   $ref: '#/components/schemas/User'

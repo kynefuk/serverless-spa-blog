@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 def get(session: Session, blog_id: int):
-    return session.query(Blog).filter(id=blog_id).first()
+    return session.query(Blog).filter(Blog.id == blog_id).first()
 
 
 def list(session: Session, skip: int = 0, limit: int = 100):
@@ -28,7 +28,8 @@ def create(session: Session, blog: schemas.BlogCreate, user_id: int):
 
 
 def delete(session: Session, blog_id: int):
-    return session.query(Blog).filter(id=blog_id).delete()
+    session.query(Blog).filter(Blog.id == blog_id).delete()
+    session.commit()
 
 
 @router.get("/blogs/", response_model=List[schemas.Blog])

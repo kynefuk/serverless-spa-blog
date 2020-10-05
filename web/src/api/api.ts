@@ -15,7 +15,13 @@
 import * as globalImportUrl from 'url';
 import { Configuration } from './configuration';
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { BASE_PATH, RequestArgs, BaseAPI, RequiredError } from './base';
+import {
+  BASE_PATH,
+  COLLECTION_FORMATS,
+  RequestArgs,
+  BaseAPI,
+  RequiredError,
+} from './base';
 
 /**
  *
@@ -359,6 +365,118 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Delete Blog
+     * @param {number} blogId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteBlogBlogsBlogIdDelete(
+      blogId: number,
+      options: any = {}
+    ): RequestArgs {
+      // verify required parameter 'blogId' is not null or undefined
+      if (blogId === null || blogId === undefined) {
+        throw new RequiredError(
+          'blogId',
+          'Required parameter blogId was null or undefined when calling deleteBlogBlogsBlogIdDelete.'
+        );
+      }
+      const localVarPath = `/blogs/{blog_id}/`.replace(
+        `{${'blog_id'}}`,
+        encodeURIComponent(String(blogId))
+      );
+      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2PasswordBearer required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === 'function'
+            ? configuration.accessToken('OAuth2PasswordBearer', [])
+            : configuration.accessToken;
+        localVarHeaderParameter['Authorization'] =
+          'Bearer ' + localVarAccessTokenValue;
+      }
+
+      localVarUrlObj.query = {
+        ...localVarUrlObj.query,
+        ...localVarQueryParameter,
+        ...options.query,
+      };
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...options.headers,
+      };
+
+      return {
+        url: globalImportUrl.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Get Blog
+     * @param {number} blogId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getBlogBlogsBlogIdGet(blogId: number, options: any = {}): RequestArgs {
+      // verify required parameter 'blogId' is not null or undefined
+      if (blogId === null || blogId === undefined) {
+        throw new RequiredError(
+          'blogId',
+          'Required parameter blogId was null or undefined when calling getBlogBlogsBlogIdGet.'
+        );
+      }
+      const localVarPath = `/blogs/{blog_id}/`.replace(
+        `{${'blog_id'}}`,
+        encodeURIComponent(String(blogId))
+      );
+      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarUrlObj.query = {
+        ...localVarUrlObj.query,
+        ...localVarQueryParameter,
+        ...options.query,
+      };
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...options.headers,
+      };
+
+      return {
+        url: globalImportUrl.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary List Blogs
      * @param {number} [skip]
      * @param {number} [limit]
@@ -666,6 +784,56 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Delete Blog
+     * @param {number} blogId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteBlogBlogsBlogIdDelete(
+      blogId: number,
+      options?: any
+    ): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<object> {
+      const localVarAxiosArgs = DefaultApiAxiosParamCreator(
+        configuration
+      ).deleteBlogBlogsBlogIdDelete(blogId, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
+     *
+     * @summary Get Blog
+     * @param {number} blogId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getBlogBlogsBlogIdGet(
+      blogId: number,
+      options?: any
+    ): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Blog> {
+      const localVarAxiosArgs = DefaultApiAxiosParamCreator(
+        configuration
+      ).getBlogBlogsBlogIdGet(blogId, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
+     *
      * @summary List Blogs
      * @param {number} [skip]
      * @param {number} [limit]
@@ -825,6 +993,32 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary Delete Blog
+     * @param {number} blogId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteBlogBlogsBlogIdDelete(blogId: number, options?: any) {
+      return DefaultApiFp(configuration).deleteBlogBlogsBlogIdDelete(
+        blogId,
+        options
+      )(axios, basePath);
+    },
+    /**
+     *
+     * @summary Get Blog
+     * @param {number} blogId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getBlogBlogsBlogIdGet(blogId: number, options?: any) {
+      return DefaultApiFp(configuration).getBlogBlogsBlogIdGet(blogId, options)(
+        axios,
+        basePath
+      );
+    },
+    /**
+     *
      * @summary List Blogs
      * @param {number} [skip]
      * @param {number} [limit]
@@ -932,6 +1126,36 @@ export class DefaultApi extends BaseAPI {
   public createUserUsersPost(userCreate: UserCreate, options?: any) {
     return DefaultApiFp(this.configuration).createUserUsersPost(
       userCreate,
+      options
+    )(this.axios, this.basePath);
+  }
+
+  /**
+   *
+   * @summary Delete Blog
+   * @param {number} blogId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public deleteBlogBlogsBlogIdDelete(blogId: number, options?: any) {
+    return DefaultApiFp(this.configuration).deleteBlogBlogsBlogIdDelete(
+      blogId,
+      options
+    )(this.axios, this.basePath);
+  }
+
+  /**
+   *
+   * @summary Get Blog
+   * @param {number} blogId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getBlogBlogsBlogIdGet(blogId: number, options?: any) {
+    return DefaultApiFp(this.configuration).getBlogBlogsBlogIdGet(
+      blogId,
       options
     )(this.axios, this.basePath);
   }
