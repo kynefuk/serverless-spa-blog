@@ -4,7 +4,7 @@ import 'easymde/dist/easymde.min.css';
 import SimpleMED from 'react-simplemde-editor';
 import marked from 'marked';
 import highlight from 'highlightjs';
-import 'highlightjs/styles/docco.css';
+import 'highlightjs/styles/vs.css';
 import { Button, makeStyles, TextField } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { useAccessTokenContext } from '../../context';

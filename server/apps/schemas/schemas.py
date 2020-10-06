@@ -47,5 +47,9 @@ class Token(BaseModel):
     token_type: str
 
 
+class VerifyToken(BaseModel):
+    access_token: str
+
+
 class TokenData(BaseModel):
     username: Optional[str] = None

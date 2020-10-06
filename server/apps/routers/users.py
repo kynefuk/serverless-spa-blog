@@ -76,6 +76,16 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
+def verify_token(access_token: str):
+    plain_data = jwt.decode(access_token, SECRET_KEY, algorithms=ALGORITHM)
+    print(plain_data)
+
+
+@router.post("/token/verify")
+def verify_access_token(access_token: schemas.VerifyToken):
+    verify_token(access_token)
+
+
 async def get_current_user(
     session: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
 ):

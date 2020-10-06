@@ -4,7 +4,7 @@ import { DefaultApi } from '../../api/api';
 import { Blog as ResBlog } from '../../api/api';
 import marked from 'marked';
 import hljs from 'highlightjs';
-import 'highlightjs/styles/github.css';
+import 'highlightjs/styles/vs.css';
 import { Container, Grid } from '@material-ui/core';
 
 hljs.initHighlightingOnLoad();
@@ -13,7 +13,6 @@ marked.setOptions({
   highlight: function (code, lang) {
     return hljs.highlightAuto(code, [lang]).value;
   },
-  langPrefix: '',
 });
 
 const Blog: React.FC = () => {
@@ -33,10 +32,12 @@ const Blog: React.FC = () => {
 
   return (
     <Container>
-      <Grid container>
-        <span
-          dangerouslySetInnerHTML={{ __html: marked(blog?.content || '') }}
-        />
+      <Grid container justify='center' alignItems='center'>
+        <div id='body'>
+          <span
+            dangerouslySetInnerHTML={{ __html: marked(blog?.content || '') }}
+          />
+        </div>
       </Grid>
     </Container>
   );
