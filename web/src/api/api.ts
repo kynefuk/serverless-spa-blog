@@ -229,6 +229,19 @@ export interface ValidationError {
    */
   type: string;
 }
+/**
+ *
+ * @export
+ * @interface VerifyToken
+ */
+export interface VerifyToken {
+  /**
+   *
+   * @type {string}
+   * @memberof VerifyToken
+   */
+  access_token: string;
+}
 
 /**
  * DefaultApi - axios parameter creator
@@ -723,6 +736,63 @@ export const DefaultApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     *
+     * @summary Verify Access Token
+     * @param {VerifyToken} verifyToken
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    verifyAccessTokenTokenVerifyPost(
+      verifyToken: VerifyToken,
+      options: any = {}
+    ): RequestArgs {
+      // verify required parameter 'verifyToken' is not null or undefined
+      if (verifyToken === null || verifyToken === undefined) {
+        throw new RequiredError(
+          'verifyToken',
+          'Required parameter verifyToken was null or undefined when calling verifyAccessTokenTokenVerifyPost.'
+        );
+      }
+      const localVarPath = `/token/verify`;
+      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      localVarUrlObj.query = {
+        ...localVarUrlObj.query,
+        ...localVarQueryParameter,
+        ...options.query,
+      };
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...options.headers,
+      };
+      const needsSerialization =
+        <any>'VerifyToken' !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+      localVarRequestOptions.data = needsSerialization
+        ? JSON.stringify(verifyToken !== undefined ? verifyToken : {})
+        : verifyToken || '';
+
+      return {
+        url: globalImportUrl.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -952,6 +1022,31 @@ export const DefaultApiFp = function (configuration?: Configuration) {
         return axios.request(axiosRequestArgs);
       };
     },
+    /**
+     *
+     * @summary Verify Access Token
+     * @param {VerifyToken} verifyToken
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    verifyAccessTokenTokenVerifyPost(
+      verifyToken: VerifyToken,
+      options?: any
+    ): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<object> {
+      const localVarAxiosArgs = DefaultApiAxiosParamCreator(
+        configuration
+      ).verifyAccessTokenTokenVerifyPost(verifyToken, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
   };
 };
 
@@ -1089,6 +1184,19 @@ export const DefaultApiFactory = function (
         axios,
         basePath
       );
+    },
+    /**
+     *
+     * @summary Verify Access Token
+     * @param {VerifyToken} verifyToken
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    verifyAccessTokenTokenVerifyPost(verifyToken: VerifyToken, options?: any) {
+      return DefaultApiFp(configuration).verifyAccessTokenTokenVerifyPost(
+        verifyToken,
+        options
+      )(axios, basePath);
     },
   };
 };
@@ -1239,5 +1347,23 @@ export class DefaultApi extends BaseAPI {
       this.axios,
       this.basePath
     );
+  }
+
+  /**
+   *
+   * @summary Verify Access Token
+   * @param {VerifyToken} verifyToken
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public verifyAccessTokenTokenVerifyPost(
+    verifyToken: VerifyToken,
+    options?: any
+  ) {
+    return DefaultApiFp(this.configuration).verifyAccessTokenTokenVerifyPost(
+      verifyToken,
+      options
+    )(this.axios, this.basePath);
   }
 }

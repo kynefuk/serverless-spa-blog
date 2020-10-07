@@ -1,6 +1,6 @@
 import React, { useContext, useReducer } from 'react';
-import { AccessTokenContextType } from './type';
-import { AccessTokenReducer } from '../reducers/index';
+import { AccessTokenContextType, ErrorContextType } from './type';
+import { AccessTokenReducer, ErrorReducer } from '../reducers/index';
 
 export const AccessTokenContext = React.createContext<AccessTokenContextType>({
   access: localStorage.getItem('access') || '',
@@ -9,6 +9,15 @@ export const AccessTokenContext = React.createContext<AccessTokenContextType>({
 
 export const useAccessTokenContext = () => {
   return useContext(AccessTokenContext);
+};
+
+export const ErrorContext = React.createContext<ErrorContextType>({
+  error: localStorage.getItem('error') || '',
+  dispatchErrorMessage: () => {},
+});
+
+export const useErrorContext = () => {
+  return useContext(ErrorContext);
 };
 
 export const AppContext: React.FC = ({ children }) => {

@@ -77,13 +77,22 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 
 def verify_token(access_token: str):
-    plain_data = jwt.decode(access_token, SECRET_KEY, algorithms=ALGORITHM)
-    print(plain_data)
+    try:
+        jwt.decode(access_token, SECRET_KEY, algorithms=ALGORITHM)
+        return True
+    except JWTError as e:
+        return False
 
 
 @router.post("/token/verify")
-def verify_access_token(access_token: schemas.VerifyToken):
-    verify_token(access_token)
+def verify_access_token(credential: schemas.VerifyToken):
+    is_token_valid = verify_token(credential.access_token)
+    if not is_token_valid:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="credentials is not valid!",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
 
 async def get_current_user(
