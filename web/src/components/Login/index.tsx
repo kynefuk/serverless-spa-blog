@@ -13,7 +13,7 @@ import {
   CssBaseline,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { useAccessTokenContext } from '../../context/index';
+import { useRootContext } from '../../context/index';
 import { AccessTokenActionType } from '../../action/type';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -41,7 +41,7 @@ const Login = () => {
   const history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { dispatchAccessToken } = useAccessTokenContext();
+  const { dispatchAccessToken } = useRootContext();
 
   const changeUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;

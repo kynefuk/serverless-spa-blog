@@ -7,7 +7,7 @@ import highlight from 'highlightjs';
 import 'highlightjs/styles/vs.css';
 import { Button, makeStyles, TextField } from '@material-ui/core';
 import { useHistory } from 'react-router';
-import { useAccessTokenContext } from '../../context';
+import { useRootContext } from '../../context';
 
 marked.setOptions({
   highlight: function (code, lang) {
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 const Editor = () => {
   const api = new DefaultApi();
   const history = useHistory();
-  const { access } = useAccessTokenContext();
+  const { access } = useRootContext();
   const [title, setTitle] = useState('');
   const [markdown, setMarkdown] = useState('');
 

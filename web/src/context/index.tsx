@@ -1,34 +1,42 @@
 import React, { useContext, useReducer } from 'react';
-import { AccessTokenContextType, ErrorContextType } from './type';
+import { RootContextType } from './type';
 import { AccessTokenReducer, ErrorReducer } from '../reducers/index';
+import { combineReducers } from 'redux';
 
-export const AccessTokenContext = React.createContext<AccessTokenContextType>({
-  access: localStorage.getItem('access') || '',
+export const RootContext = React.createContext<RootContextType>({
+  access: '',
   dispatchAccessToken: () => {},
-});
-
-export const useAccessTokenContext = () => {
-  return useContext(AccessTokenContext);
-};
-
-export const ErrorContext = React.createContext<ErrorContextType>({
-  error: localStorage.getItem('error') || '',
+  error: '',
   dispatchErrorMessage: () => {},
 });
 
-export const useErrorContext = () => {
-  return useContext(ErrorContext);
+export const useRootContext = () => {
+  return useContext(RootContext);
 };
+
+const rootReducer = combineReducers({
+  access: AccessTokenReducer,
+  error: ErrorReducer,
+});
 
 export const AppContext: React.FC = ({ children }) => {
   const storedAccessToken = localStorage.getItem('access') || '';
-  const [access, dispatchAccessToken] = useReducer(
-    AccessTokenReducer,
-    storedAccessToken
-  );
+  const storedError = localStorage.getItem('error') || '';
+  const [state, dispatch] = useReducer(rootReducer, {
+    access: storedAccessToken,
+    error: storedError,
+  });
+
   return (
-    <AccessTokenContext.Provider value={{ access, dispatchAccessToken }}>
+    <RootContext.Provider
+      value={{
+        access: state.access,
+        error: state.error,
+        dispatchAccessToken: dispatch,
+        dispatchErrorMessage: dispatch,
+      }}
+    >
       {children}
-    </AccessTokenContext.Provider>
+    </RootContext.Provider>
   );
 };
