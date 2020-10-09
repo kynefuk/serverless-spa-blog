@@ -11,10 +11,14 @@ import {
   Container,
   makeStyles,
   CssBaseline,
+  IconButton,
+  Collapse,
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { useRootContext } from '../../context/index';
-import { AccessTokenActionType } from '../../action/type';
+import { AccessTokenActionType, ErrorActionType } from '../../action/type';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,7 +45,8 @@ const Login = () => {
   const history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { dispatchAccessToken } = useRootContext();
+  const { error, dispatchAccessToken, dispatchErrorMessage } = useRootContext();
+  const [open, setOpen] = useState(true);
 
   const changeUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
@@ -56,13 +61,24 @@ const Login = () => {
   const handleOnSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const response = await api.loginForAccessTokenTokenPost(username, password);
-    dispatchAccessToken({
-      type: AccessTokenActionType.ADD,
-      payload: response.data.access_token,
-    });
+    try {
+      const response = await api.loginForAccessTokenTokenPost(
+        username,
+        password
+      );
+      dispatchAccessToken({
+        type: AccessTokenActionType.ADD,
+        payload: response.data.access_token,
+      });
 
-    history.push('/');
+      history.push('/');
+    } catch (err) {
+      dispatchErrorMessage({
+        type: ErrorActionType.ADD,
+        payload: '認証情報が誤っています',
+      });
+      console.error(err);
+    }
   };
 
   const classes = useStyles();
@@ -77,6 +93,28 @@ const Login = () => {
         <Typography component='h1' variant='h5'>
           Sign in
         </Typography>
+        {error && (
+          <Collapse in={open}>
+            <Alert
+              severity='error'
+              action={
+                <IconButton
+                  aria-label='close'
+                  color='inherit'
+                  size='small'
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  <CloseIcon fontSize='inherit' />
+                </IconButton>
+              }
+            >
+              <AlertTitle>Error</AlertTitle>
+              {error}
+            </Alert>
+          </Collapse>
+        )}
         <form className={classes.form} noValidate>
           <TextField
             variant='outlined'
