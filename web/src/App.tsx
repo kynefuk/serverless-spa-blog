@@ -5,6 +5,7 @@ import Editor from './components/Editor';
 import BlogList from './components/BlogList';
 import Blog from './components/Blog';
 import Auth from './components/Auth';
+import Admin from './components/Admin';
 
 function App() {
   return (
@@ -15,8 +16,9 @@ function App() {
         <Route path='/:id(\d+)' exact component={Blog} />
         <Auth>
           <Switch>
+            <Route path='/admin' exact component={Admin} />
             <Route path='/:id(\d+)/edit' exact component={Editor} />
-            <Route path='/create' exact component={Editor} />
+            <Route path='/admin/create' exact component={Editor} />
           </Switch>
         </Auth>
         <Redirect to='/' />

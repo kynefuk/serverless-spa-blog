@@ -5,7 +5,7 @@ import { Blog as ResBlog } from '../../api/api';
 import marked from 'marked';
 import hljs from 'highlightjs';
 import 'highlightjs/styles/vs.css';
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid, Typography } from '@material-ui/core';
 
 hljs.initHighlightingOnLoad();
 
@@ -23,7 +23,6 @@ const Blog: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await api.getBlogBlogsBlogIdGet(Number(id));
-      console.log(response);
       setBlog(response.data);
     };
 
@@ -33,6 +32,7 @@ const Blog: React.FC = () => {
   return (
     <Container>
       <Grid container justify='center' alignItems='center'>
+        <Typography variant='h3'>{blog?.title}</Typography>
         <div id='body'>
           <span
             dangerouslySetInnerHTML={{ __html: marked(blog?.content || '') }}

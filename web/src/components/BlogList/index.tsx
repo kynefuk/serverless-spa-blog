@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DefaultApi } from '../../api/api';
 import { Blog } from '../../api/api';
-import { List, ListItem, Container, Grid } from '@material-ui/core';
+import { List, ListItem, Container, Grid, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 const BlogList: React.FC = () => {
@@ -22,7 +22,9 @@ const BlogList: React.FC = () => {
         <List>
           {blogs.map((blog) => (
             <Link to={`/${blog.id}`} key={blog.id}>
-              <ListItem>{blog.title}</ListItem>
+              <ListItem>
+                <Typography variant='h6'>{blog.title}</Typography>
+              </ListItem>
             </Link>
           ))}
         </List>

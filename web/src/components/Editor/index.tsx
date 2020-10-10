@@ -49,7 +49,6 @@ const Editor = () => {
       },
       options
     );
-    console.log(response);
     history.push(`/${response.data.id}`);
   };
 

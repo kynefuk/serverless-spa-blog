@@ -11,7 +11,11 @@ ReactDOM.render(
   <React.StrictMode>
     <AppContext>
       <HashRouter hashType={'slash'}>
-        <AppBar position='sticky' color='default'>
+        <AppBar
+          position='sticky'
+          color='default'
+          style={{ marginBottom: '50px' }}
+        >
           <Toolbar>
             <Typography variant='h6'>
               <Link to='/'>ブログ</Link>

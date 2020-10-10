@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { DefaultApi } from '../../api/api';
 import {
@@ -58,6 +58,13 @@ const Login = () => {
     setPassword(value);
   };
 
+  useEffect(() => {
+    dispatchErrorMessage({
+      type: ErrorActionType.DELETE_ERROR,
+      payload: '',
+    });
+  }, [dispatchErrorMessage]);
+
   const handleOnSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -67,14 +74,19 @@ const Login = () => {
         password
       );
       dispatchAccessToken({
-        type: AccessTokenActionType.ADD,
+        type: AccessTokenActionType.ADD_TOKEN,
         payload: response.data.access_token,
       });
 
-      history.push('/');
+      dispatchErrorMessage({
+        type: ErrorActionType.DELETE_ERROR,
+        payload: '',
+      });
+
+      history.push('/admin');
     } catch (err) {
       dispatchErrorMessage({
-        type: ErrorActionType.ADD,
+        type: ErrorActionType.ADD_ERROR,
         payload: '認証情報が誤っています',
       });
       console.error(err);
