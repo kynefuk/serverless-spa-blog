@@ -83,7 +83,7 @@ const Login = () => {
         payload: '',
       });
 
-      history.push('/admin');
+      history.push('/admin/blogs');
     } catch (err) {
       dispatchErrorMessage({
         type: ErrorActionType.ADD_ERROR,

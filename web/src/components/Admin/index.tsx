@@ -44,7 +44,16 @@ const Admin: React.FC = () => {
                   <TableCell>
                     <Link to={`/${blog.id}`}>{blog.title}</Link>
                   </TableCell>
-                  <TableCell>編集</TableCell>
+                  <TableCell>
+                    <Link
+                      to={{
+                        pathname: `/admin/blog/${blog.id}/edit`,
+                        state: { blog },
+                      }}
+                    >
+                      編集
+                    </Link>
+                  </TableCell>
                   <TableCell>削除</TableCell>
                 </TableRow>
               ))}

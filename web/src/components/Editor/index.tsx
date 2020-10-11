@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { DefaultApi } from '../../api/api';
+import { Blog, DefaultApi } from '../../api/api';
 import 'easymde/dist/easymde.min.css';
 import SimpleMED from 'react-simplemde-editor';
 import marked from 'marked';
 import highlight from 'highlightjs';
 import 'highlightjs/styles/vs.css';
 import { Button, makeStyles, TextField } from '@material-ui/core';
-import { useHistory } from 'react-router';
+import { RouteComponentProps, StaticContext, useHistory } from 'react-router';
 import { useRootContext } from '../../context';
 
 marked.setOptions({
@@ -21,12 +21,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Editor = () => {
+interface LocationState {
+  blog: Blog;
+}
+
+const Editor: React.FC<RouteComponentProps<
+  {},
+  StaticContext,
+  LocationState
+>> = (props?) => {
   const api = new DefaultApi();
   const history = useHistory();
   const { access } = useRootContext();
   const [title, setTitle] = useState('');
   const [markdown, setMarkdown] = useState('');
+  let blog: Blog | undefined;
+  if (props?.location.state !== undefined) {
+    blog = props.location.state.blog;
+  }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
@@ -52,40 +64,92 @@ const Editor = () => {
     history.push(`/${response.data.id}`);
   };
 
+  const handleOnEdit = async (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const options = {
+      headers: {
+        Authorization: `Bearer ${access}`,
+      },
+    };
+
+    // const response = await api.
+  };
+
   const classes = useStyles();
 
   return (
     <>
-      <form noValidate autoComplete='off'>
-        <TextField
-          id='title'
-          variant='outlined'
-          margin='normal'
-          required
-          fullWidth
-          label='Title'
-          name='title'
-          autoComplete='title'
-          autoFocus
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleTitleChange(e)
-          }
-        />
-      </form>
-      <SimpleMED onChange={(e) => setMarkdown(e)} />
-      <div id='body'>
-        <span dangerouslySetInnerHTML={{ __html: marked(markdown) }} />
-      </div>
-      <Button
-        type='submit'
-        fullWidth
-        variant='contained'
-        color='primary'
-        className={classes.submit}
-        onClick={(e: React.FormEvent<HTMLButtonElement>) => handleOnSubmit(e)}
-      >
-        Submit
-      </Button>
+      {blog ? (
+        <>
+          <form noValidate autoComplete='off'>
+            <TextField
+              id='title'
+              variant='outlined'
+              margin='normal'
+              required
+              fullWidth
+              label='Title'
+              name='title'
+              autoComplete='title'
+              autoFocus
+              defaultValue={blog.title}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleTitleChange(e)
+              }
+            />
+          </form>
+          <SimpleMED value={blog.content} onChange={(e) => setMarkdown(e)} />
+          <div id='body'>
+            <span dangerouslySetInnerHTML={{ __html: marked(markdown) }} />
+          </div>
+          <Button
+            type='submit'
+            fullWidth
+            variant='contained'
+            color='primary'
+            className={classes.submit}
+            onClick={(e: React.FormEvent<HTMLButtonElement>) => handleOnEdit(e)}
+          >
+            Submit
+          </Button>
+        </>
+      ) : (
+        <>
+          <form noValidate autoComplete='off'>
+            <TextField
+              id='title'
+              variant='outlined'
+              margin='normal'
+              required
+              fullWidth
+              label='Title'
+              name='title'
+              autoComplete='title'
+              autoFocus
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleTitleChange(e)
+              }
+            />
+          </form>
+          <SimpleMED onChange={(e) => setMarkdown(e)} />
+          <div id='body'>
+            <span dangerouslySetInnerHTML={{ __html: marked(markdown) }} />
+          </div>
+          <Button
+            type='submit'
+            fullWidth
+            variant='contained'
+            color='primary'
+            className={classes.submit}
+            onClick={(e: React.FormEvent<HTMLButtonElement>) =>
+              handleOnSubmit(e)
+            }
+          >
+            Submit
+          </Button>
+        </>
+      )}
     </>
   );
 };
