@@ -17,8 +17,8 @@ function App() {
         <Auth>
           <Switch>
             <Route path='/admin/blogs' exact component={Admin} />
-            <Route path='/admin/blog/:id(\d+)/edit' exact component={Editor} />
-            <Route path='/admin/blog/create' exact component={Editor} />
+            <Route path='/admin/blogs/:id(\d+)/edit' exact component={Editor} />
+            <Route path='/admin/blogs/create' exact component={Editor} />
           </Switch>
         </Auth>
         <Redirect to='/' />

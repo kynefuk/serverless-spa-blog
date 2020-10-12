@@ -73,7 +73,16 @@ const Editor: React.FC<RouteComponentProps<
       },
     };
 
-    // const response = await api.
+    const response = await api.editBlogBlogsBlogIdPatch(
+      blog!.id,
+      {
+        title: title,
+        content: markdown,
+      },
+      options
+    );
+
+    history.push(`/${response.data.id}`);
   };
 
   const classes = useStyles();

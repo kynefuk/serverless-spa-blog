@@ -146,7 +146,7 @@ export interface Token {
    * @type {string}
    * @memberof Token
    */
-  token_type: string;
+  tokenType: string;
 }
 /**
  *
@@ -433,6 +433,86 @@ export const DefaultApiAxiosParamCreator = function (
         ...localVarHeaderParameter,
         ...options.headers,
       };
+
+      return {
+        url: globalImportUrl.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Edit Blog
+     * @param {number} blogId
+     * @param {BlogCreate} blogCreate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    editBlogBlogsBlogIdPatch(
+      blogId: number,
+      blogCreate: BlogCreate,
+      options: any = {}
+    ): RequestArgs {
+      // verify required parameter 'blogId' is not null or undefined
+      if (blogId === null || blogId === undefined) {
+        throw new RequiredError(
+          'blogId',
+          'Required parameter blogId was null or undefined when calling editBlogBlogsBlogIdPatch.'
+        );
+      }
+      // verify required parameter 'blogCreate' is not null or undefined
+      if (blogCreate === null || blogCreate === undefined) {
+        throw new RequiredError(
+          'blogCreate',
+          'Required parameter blogCreate was null or undefined when calling editBlogBlogsBlogIdPatch.'
+        );
+      }
+      const localVarPath = `/blogs/{blog_id}`.replace(
+        `{${'blog_id'}}`,
+        encodeURIComponent(String(blogId))
+      );
+      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2PasswordBearer required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === 'function'
+            ? configuration.accessToken('OAuth2PasswordBearer', [])
+            : configuration.accessToken;
+        localVarHeaderParameter['Authorization'] =
+          'Bearer ' + localVarAccessTokenValue;
+      }
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      localVarUrlObj.query = {
+        ...localVarUrlObj.query,
+        ...localVarQueryParameter,
+        ...options.query,
+      };
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...options.headers,
+      };
+      const needsSerialization =
+        <any>'BlogCreate' !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+      localVarRequestOptions.data = needsSerialization
+        ? JSON.stringify(blogCreate !== undefined ? blogCreate : {})
+        : blogCreate || '';
 
       return {
         url: globalImportUrl.format(localVarUrlObj),
@@ -879,6 +959,33 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Edit Blog
+     * @param {number} blogId
+     * @param {BlogCreate} blogCreate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    editBlogBlogsBlogIdPatch(
+      blogId: number,
+      blogCreate: BlogCreate,
+      options?: any
+    ): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Blog> {
+      const localVarAxiosArgs = DefaultApiAxiosParamCreator(
+        configuration
+      ).editBlogBlogsBlogIdPatch(blogId, blogCreate, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
+     *
      * @summary Get Blog
      * @param {number} blogId
      * @param {*} [options] Override http request option.
@@ -1101,6 +1208,25 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary Edit Blog
+     * @param {number} blogId
+     * @param {BlogCreate} blogCreate
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    editBlogBlogsBlogIdPatch(
+      blogId: number,
+      blogCreate: BlogCreate,
+      options?: any
+    ) {
+      return DefaultApiFp(configuration).editBlogBlogsBlogIdPatch(
+        blogId,
+        blogCreate,
+        options
+      )(axios, basePath);
+    },
+    /**
+     *
      * @summary Get Blog
      * @param {number} blogId
      * @param {*} [options] Override http request option.
@@ -1249,6 +1375,27 @@ export class DefaultApi extends BaseAPI {
   public deleteBlogBlogsBlogIdDelete(blogId: number, options?: any) {
     return DefaultApiFp(this.configuration).deleteBlogBlogsBlogIdDelete(
       blogId,
+      options
+    )(this.axios, this.basePath);
+  }
+
+  /**
+   *
+   * @summary Edit Blog
+   * @param {number} blogId
+   * @param {BlogCreate} blogCreate
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public editBlogBlogsBlogIdPatch(
+    blogId: number,
+    blogCreate: BlogCreate,
+    options?: any
+  ) {
+    return DefaultApiFp(this.configuration).editBlogBlogsBlogIdPatch(
+      blogId,
+      blogCreate,
       options
     )(this.axios, this.basePath);
   }

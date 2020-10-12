@@ -27,6 +27,14 @@ def create(session: Session, blog: schemas.BlogCreate, user_id: int):
     return blog
 
 
+def edit(session: Session, blog_id: int, blog: schemas.BlogCreate):
+    data = session.query(Blog).filter(Blog.id == blog_id).first()
+    data.title = blog.title
+    data.content = blog.content
+    session.commit()
+    return data
+
+
 def delete(session: Session, blog_id: int):
     session.query(Blog).filter(Blog.id == blog_id).delete()
     session.commit()
@@ -49,6 +57,16 @@ def create_blog(
 @router.get("/blogs/{blog_id}/", response_model=schemas.Blog)
 def get_blog(blog_id: int, session: Session = Depends(get_db)):
     return get(session=session, blog_id=blog_id)
+
+
+@router.patch("/blogs/{blog_id}", response_model=schemas.Blog)
+def edit_blog(
+    blog_id: int,
+    blog: schemas.BlogCreate,
+    session: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return edit(session=session, blog_id=blog_id, blog=blog)
 
 
 @router.delete("/blogs/{blog_id}/")

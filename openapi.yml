@@ -2,6 +2,9 @@ openapi: 3.0.2
 info:
   title: FastAPI
   version: 0.1.0
+servers:
+  - url: http:localhost:7000
+    description: dev server
 paths:
   /blogs/:
     get:
@@ -102,6 +105,38 @@ paths:
           content:
             application/json:
               schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+        - OAuth2PasswordBearer: []
+  '/blogs/{blog_id}':
+    patch:
+      summary: Edit Blog
+      operationId: edit_blog_blogs__blog_id__patch
+      parameters:
+        - required: true
+          schema:
+            title: Blog Id
+            type: integer
+          name: blog_id
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
         '422':
           description: Validation Error
           content:
