@@ -33,12 +33,13 @@ const Editor: React.FC<RouteComponentProps<
   const api = new DefaultApi();
   const history = useHistory();
   const { access } = useRootContext();
-  const [title, setTitle] = useState('');
-  const [markdown, setMarkdown] = useState('');
   let blog: Blog | undefined;
   if (props?.location.state !== undefined) {
     blog = props.location.state.blog;
   }
+
+  const [title, setTitle] = useState(blog ? blog.title : '');
+  const [markdown, setMarkdown] = useState(blog ? blog.content : '');
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
@@ -110,7 +111,10 @@ const Editor: React.FC<RouteComponentProps<
           </form>
           <SimpleMED value={blog.content} onChange={(e) => setMarkdown(e)} />
           <div id='body'>
-            <span dangerouslySetInnerHTML={{ __html: marked(markdown) }} />
+            <span
+              defaultValue={blog.content}
+              dangerouslySetInnerHTML={{ __html: marked(markdown) }}
+            />
           </div>
           <Button
             type='submit'
@@ -120,7 +124,7 @@ const Editor: React.FC<RouteComponentProps<
             className={classes.submit}
             onClick={(e: React.FormEvent<HTMLButtonElement>) => handleOnEdit(e)}
           >
-            Submit
+            Edit
           </Button>
         </>
       ) : (
