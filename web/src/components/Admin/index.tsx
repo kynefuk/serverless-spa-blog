@@ -12,12 +12,18 @@ import {
   TableCell,
   Paper,
   Button,
+  IconButton,
+  Collapse,
 } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import CloseIcon from '@material-ui/icons/Close';
 import { Link } from 'react-router-dom';
 import { useRootContext } from '../../context';
 
 const Admin: React.FC = () => {
   const api = new DefaultApi();
+  const [message, setMessage] = useState('');
+  const [open, setOpen] = useState(true);
   const { access } = useRootContext();
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
@@ -43,6 +49,7 @@ const Admin: React.FC = () => {
       });
 
       setBlogs(deleted);
+      setMessage('削除しました。');
     } catch (error) {
       console.error(error);
     }
@@ -51,6 +58,28 @@ const Admin: React.FC = () => {
   return (
     <Container>
       <Grid container justify='center' alignItems='center'>
+        {message && (
+          <Collapse in={open}>
+            <Alert
+              severity='info'
+              action={
+                <IconButton
+                  aria-label='close'
+                  color='inherit'
+                  size='small'
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  <CloseIcon fontSize='inherit' />
+                </IconButton>
+              }
+            >
+              <AlertTitle>Info</AlertTitle>
+              {message}
+            </Alert>
+          </Collapse>
+        )}
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
