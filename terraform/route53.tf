@@ -1,10 +1,3 @@
-variable "domain" {
-  type = map(string)
-  default = {
-    default = "default"
-    stg     = "kata-oji.com"
-  }
-}
 
 data "aws_route53_zone" "primary" {
   name = var.domain[terraform.workspace]
