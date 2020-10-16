@@ -3,13 +3,17 @@ data "aws_route53_zone" "primary" {
   name = var.domain[terraform.workspace]
 }
 
-# resource "aws_route53_record" "frontend" {
-#   zone_id = data.aws_route53_zone.primary.zone_id
-#   name    = var.domain[terraform.workspace]
-#   type    = "A"
-#   ttl     = "300"
-#   # records = [aws_cloudfron]
-# }
+resource "aws_route53_record" "frontend" {
+  zone_id = data.aws_route53_zone.primary.zone_id
+  name    = var.domain[terraform.workspace]
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.frontend_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.frontend_distribution.hosted_zone_id
+    evaluate_target_health = true
+  }
+}
 
 
 resource "aws_route53_record" "validation_record" {

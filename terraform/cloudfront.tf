@@ -14,12 +14,13 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
 
   enabled             = true
   default_root_object = "index.html"
+  aliases             = [var.domain[terraform.workspace]]
 
-  logging_config {
-    include_cookies = false
-    bucket          = aws_s3_bucket.cloudfront_log.bucket_domain_name
-    prefix          = "access-log/"
-  }
+  # logging_config {
+  #   include_cookies = false
+  #   bucket          = aws_s3_bucket.cloudfront_log.bucket_domain_name
+  #   prefix          = "access-log/"
+  # }
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
