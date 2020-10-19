@@ -7,6 +7,7 @@ on:
       - "**.tsx"
       - "**.ts"
       - "**.css"
+      - ".github"
 
 jobs:
   build:
@@ -43,7 +44,8 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-            name: build
+            name: frontend-build-artifact
+            path: ./web/build
       - name: Deploy to S3
         env:
           FRONTEND_BUCKET: ${{ secrets.FRONTEND_BUCKET_NAME }}
