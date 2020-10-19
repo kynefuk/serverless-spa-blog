@@ -6,6 +6,7 @@ on:
     paths:
       - "**.tsx"
       - "**.ts"
+      - "**.css"
 
 jobs:
   build:

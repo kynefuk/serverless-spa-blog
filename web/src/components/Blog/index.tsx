@@ -27,7 +27,7 @@ const Blog: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [api, id]);
 
   return (
     <Container>

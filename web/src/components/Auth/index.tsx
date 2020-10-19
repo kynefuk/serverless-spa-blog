@@ -19,7 +19,7 @@ const Auth: React.FC = ({ children }) => {
     };
 
     fetchData();
-  }, []);
+  }, [access, api, history]);
 
   return <div>{children}</div>;
 };

@@ -33,7 +33,7 @@ const Admin: React.FC = () => {
       setBlogs(response.data);
     };
     fetchData();
-  }, []);
+  }, [api]);
 
   const handleOnDelete = async (blogId: number) => {
     const options = {

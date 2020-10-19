@@ -14,7 +14,7 @@ const BlogList: React.FC = () => {
       setBlogs(response.data);
     };
     fetchData();
-  }, []);
+  }, [api]);
 
   return (
     <Container>

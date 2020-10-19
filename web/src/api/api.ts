@@ -17,7 +17,6 @@ import { Configuration } from './configuration';
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 import {
   BASE_PATH,
-  COLLECTION_FORMATS,
   RequestArgs,
   BaseAPI,
   RequiredError,
@@ -307,8 +306,9 @@ export const DefaultApiAxiosParamCreator = function (
         ...localVarHeaderParameter,
         ...options.headers,
       };
+      // eslint-disable-next-line
       const needsSerialization =
-        <any>'BlogCreate' !== 'string' ||
+        'BlogCreate' as any !== 'string' ||
         localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(blogCreate !== undefined ? blogCreate : {})
@@ -364,8 +364,9 @@ export const DefaultApiAxiosParamCreator = function (
         ...localVarHeaderParameter,
         ...options.headers,
       };
+      // eslint-disable-next-line
       const needsSerialization =
-        <any>'UserCreate' !== 'string' ||
+        'UserCreate' as any !== 'string' ||
         localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(userCreate !== undefined ? userCreate : {})
@@ -507,8 +508,9 @@ export const DefaultApiAxiosParamCreator = function (
         ...localVarHeaderParameter,
         ...options.headers,
       };
+      // eslint-disable-next-line
       const needsSerialization =
-        <any>'BlogCreate' !== 'string' ||
+        'BlogCreate' as any !== 'string' ||
         localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(blogCreate !== undefined ? blogCreate : {})
@@ -861,8 +863,9 @@ export const DefaultApiAxiosParamCreator = function (
         ...localVarHeaderParameter,
         ...options.headers,
       };
+      // eslint-disable-next-line
       const needsSerialization =
-        <any>'VerifyToken' !== 'string' ||
+        'VerifyToken' as any !== 'string' ||
         localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(verifyToken !== undefined ? verifyToken : {})
