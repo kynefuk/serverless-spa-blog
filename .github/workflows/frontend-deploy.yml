@@ -3,10 +3,10 @@ on:
   push:
     branches:
       - "master"
-    # paths:
-    #   - "**.tsx"
-    #   - "**.ts"
-    #   - "**.css"
+    paths:
+      - "**.tsx"
+      - "**.ts"
+      - "**.css"
 
 jobs:
   build:
