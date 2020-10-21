@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { DefaultApi } from '../../api/api';
-import { Blog } from '../../api/api';
+import React, { useEffect, useState } from "react";
+import { DefaultApi } from "../../api/api";
+import { Blog } from "../../api/api";
 import {
   Container,
   Grid,
@@ -14,15 +14,15 @@ import {
   Button,
   IconButton,
   Collapse,
-} from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
-import CloseIcon from '@material-ui/icons/Close';
-import { Link } from 'react-router-dom';
-import { useRootContext } from '../../context';
+} from "@material-ui/core";
+import { Alert, AlertTitle } from "@material-ui/lab";
+import CloseIcon from "@material-ui/icons/Close";
+import { Link } from "react-router-dom";
+import { useRootContext } from "../../context";
 
 const Admin: React.FC = () => {
   const api = new DefaultApi();
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [open, setOpen] = useState(true);
   const { access } = useRootContext();
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -49,7 +49,7 @@ const Admin: React.FC = () => {
       });
 
       setBlogs(deleted);
-      setMessage('削除しました。');
+      setMessage("削除しました。");
     } catch (error) {
       console.error(error);
     }
@@ -57,21 +57,21 @@ const Admin: React.FC = () => {
 
   return (
     <Container>
-      <Grid container justify='center' alignItems='center'>
+      <Grid container justify="center" alignItems="center">
         {message && (
           <Collapse in={open}>
             <Alert
-              severity='info'
+              severity="info"
               action={
                 <IconButton
-                  aria-label='close'
-                  color='inherit'
-                  size='small'
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
                   onClick={() => {
                     setOpen(false);
                   }}
                 >
-                  <CloseIcon fontSize='inherit' />
+                  <CloseIcon fontSize="inherit" />
                 </IconButton>
               }
             >
@@ -107,7 +107,7 @@ const Admin: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Button
-                      color='secondary'
+                      color="secondary"
                       onClick={() => handleOnDelete(blog.id)}
                     >
                       削除

@@ -1,4 +1,4 @@
-import { AccessTokenAction, ErrorAction } from '../action/index';
+import { AccessTokenAction, ErrorAction } from "../action/index";
 
 type AccessTokenContextType = {
   access: string;

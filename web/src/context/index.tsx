@@ -1,12 +1,12 @@
-import React, { useContext, useReducer } from 'react';
-import { RootContextType } from './type';
-import { AccessTokenReducer, ErrorReducer } from '../reducers/index';
-import { combineReducers } from 'redux';
+import React, { useContext, useReducer } from "react";
+import { RootContextType } from "./type";
+import { AccessTokenReducer, ErrorReducer } from "../reducers/index";
+import { combineReducers } from "redux";
 
 export const RootContext = React.createContext<RootContextType>({
-  access: '',
+  access: "",
   dispatchAccessToken: () => {},
-  error: '',
+  error: "",
   dispatchErrorMessage: () => {},
 });
 
@@ -20,8 +20,8 @@ const rootReducer = combineReducers({
 });
 
 export const AppContext: React.FC = ({ children }) => {
-  const storedAccessToken = localStorage.getItem('access') || '';
-  const storedError = localStorage.getItem('error') || '';
+  const storedAccessToken = localStorage.getItem("access") || "";
+  const storedError = localStorage.getItem("error") || "";
   const [state, dispatch] = useReducer(rootReducer, {
     access: storedAccessToken,
     error: storedError,

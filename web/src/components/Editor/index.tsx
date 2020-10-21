@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Blog, DefaultApi } from '../../api/api';
-import 'easymde/dist/easymde.min.css';
-import SimpleMED from 'react-simplemde-editor';
-import marked from 'marked';
-import highlight from 'highlightjs';
-import 'highlightjs/styles/vs.css';
-import { Button, makeStyles, TextField } from '@material-ui/core';
-import { RouteComponentProps, StaticContext, useHistory } from 'react-router';
-import { useRootContext } from '../../context';
+import React, { useState } from "react";
+import { Blog, DefaultApi } from "../../api/api";
+import "easymde/dist/easymde.min.css";
+import SimpleMED from "react-simplemde-editor";
+import marked from "marked";
+import highlight from "highlightjs";
+import "highlightjs/styles/vs.css";
+import { Button, makeStyles, TextField } from "@material-ui/core";
+import { RouteComponentProps, StaticContext, useHistory } from "react-router";
+import { useRootContext } from "../../context";
 
 marked.setOptions({
   highlight: function (code, lang) {
@@ -38,8 +38,8 @@ const Editor: React.FC<RouteComponentProps<
     blog = props.location.state.blog;
   }
 
-  const [title, setTitle] = useState(blog ? blog.title : '');
-  const [markdown, setMarkdown] = useState(blog ? blog.content : '');
+  const [title, setTitle] = useState(blog ? blog.title : "");
+  const [markdown, setMarkdown] = useState(blog ? blog.content : "");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
@@ -92,16 +92,16 @@ const Editor: React.FC<RouteComponentProps<
     <>
       {blog ? (
         <>
-          <form noValidate autoComplete='off'>
+          <form noValidate autoComplete="off">
             <TextField
-              id='title'
-              variant='outlined'
-              margin='normal'
+              id="title"
+              variant="outlined"
+              margin="normal"
               required
               fullWidth
-              label='Title'
-              name='title'
-              autoComplete='title'
+              label="Title"
+              name="title"
+              autoComplete="title"
               autoFocus
               defaultValue={blog.title}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -110,17 +110,17 @@ const Editor: React.FC<RouteComponentProps<
             />
           </form>
           <SimpleMED value={blog.content} onChange={(e) => setMarkdown(e)} />
-          <div id='body'>
+          <div id="body">
             <span
               defaultValue={blog.content}
               dangerouslySetInnerHTML={{ __html: marked(markdown) }}
             />
           </div>
           <Button
-            type='submit'
+            type="submit"
             fullWidth
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             className={classes.submit}
             onClick={(e: React.FormEvent<HTMLButtonElement>) => handleOnEdit(e)}
           >
@@ -129,16 +129,16 @@ const Editor: React.FC<RouteComponentProps<
         </>
       ) : (
         <>
-          <form noValidate autoComplete='off'>
+          <form noValidate autoComplete="off">
             <TextField
-              id='title'
-              variant='outlined'
-              margin='normal'
+              id="title"
+              variant="outlined"
+              margin="normal"
               required
               fullWidth
-              label='Title'
-              name='title'
-              autoComplete='title'
+              label="Title"
+              name="title"
+              autoComplete="title"
               autoFocus
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleTitleChange(e)
@@ -146,14 +146,14 @@ const Editor: React.FC<RouteComponentProps<
             />
           </form>
           <SimpleMED onChange={(e) => setMarkdown(e)} />
-          <div id='body'>
+          <div id="body">
             <span dangerouslySetInnerHTML={{ __html: marked(markdown) }} />
           </div>
           <Button
-            type='submit'
+            type="submit"
             fullWidth
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             className={classes.submit}
             onClick={(e: React.FormEvent<HTMLButtonElement>) =>
               handleOnSubmit(e)

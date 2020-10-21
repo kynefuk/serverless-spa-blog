@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router';
-import { DefaultApi } from '../../api/api';
-import { useRootContext } from '../../context/index';
+import React, { useEffect } from "react";
+import { useHistory } from "react-router";
+import { DefaultApi } from "../../api/api";
+import { useRootContext } from "../../context/index";
 
 const Auth: React.FC = ({ children }) => {
   const api = new DefaultApi();
@@ -14,7 +14,7 @@ const Auth: React.FC = ({ children }) => {
           access_token: access,
         });
       } catch (err) {
-        history.push('/login');
+        history.push("/login");
       }
     };
 
