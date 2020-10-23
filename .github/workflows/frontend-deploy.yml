@@ -7,7 +7,7 @@ on:
       - "**.tsx"
       - "**.ts"
       - "**.css"
-      - "frontend-deploy.yml"
+      - ".github/frontend-deploy.yml"
 
 jobs:
   build:
