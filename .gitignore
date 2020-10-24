@@ -23,6 +23,7 @@ node_modules
 
 # Frontend
 web/node_modules
+web/.env
 
 # Terraform
 terraform/.env

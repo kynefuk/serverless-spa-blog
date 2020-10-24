@@ -12,20 +12,21 @@
  * Do not edit the class manually.
  */
 
-import { Configuration } from './configuration';
-import globalAxios, { AxiosInstance } from 'axios';
+import { Configuration } from "./configuration";
+import globalAxios, { AxiosInstance } from "axios";
 
-export const BASE_PATH = 'http://localhost:7000'.replace(/\/+$/, '');
+export const BASE_PATH =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:7000";
 
 /**
  *
  * @export
  */
 export const COLLECTION_FORMATS = {
-  csv: ',',
-  ssv: ' ',
-  tsv: '\t',
-  pipes: '|',
+  csv: ",",
+  ssv: " ",
+  tsv: "\t",
+  pipes: "|",
 };
 
 /**
@@ -65,7 +66,7 @@ export class BaseAPI {
  * @extends {Error}
  */
 export class RequiredError extends Error {
-  name: 'RequiredError' = 'RequiredError';
+  name: "RequiredError" = "RequiredError";
   constructor(public field: string, msg?: string) {
     super(msg);
   }
