@@ -19,6 +19,7 @@ resource "aws_route53_record" "backend-name-server" {
   zone_id = data.aws_route53_zone.frontend.zone_id
   name    = var.backend[terraform.workspace]
   type    = "NS"
+  ttl     = "300"
 
   records = [
     aws_route53_zone.backend.name_servers[0],

@@ -16,26 +16,6 @@ provider:
   timeout: 300
   logRetentionInDays: 7
 
-# you can add statements to the Lambda function's IAM Role here
-#   iamRoleStatements:
-#     - Effect: "Allow"
-#       Action:
-#         - "s3:ListBucket"
-#       Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#     - Effect: "Allow"
-#       Action:
-#         - "s3:PutObject"
-#       Resource:
-#         Fn::Join:
-#           - ""
-#           - - "arn:aws:s3:::"
-#             - "Ref" : "ServerlessDeploymentBucket"
-#             - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
 package:
   exclude:
     - .vscode
@@ -69,6 +49,12 @@ custom:
   pythonRequirements:
     dockerizePip: false
     usePoetry: false
+  customDomain:
+    domainName: ${self:custom.envFile.CUSTOM_DOMAIN}
+    basePath: ""
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+    certificateName: ${self:custom.envFile.CUSTOM_DOMAIN}
 
 resources:
   Resources:
@@ -263,3 +249,4 @@ resources:
           - !Ref SampleSGForDB
 plugins:
   - serverless-python-requirements
+  - serverless-domain-manager

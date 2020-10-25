@@ -24,7 +24,7 @@ resource "aws_acm_certificate" "backend" {
     create_before_destroy = true
   }
 
-  depends_on = [aws_route53_zone.backend]
+  depends_on = [aws_route53_zone.backend, aws_route53_record.backend-name-server]
 }
 
 resource "aws_acm_certificate_validation" "wait-validation-backend" {
@@ -32,5 +32,5 @@ resource "aws_acm_certificate_validation" "wait-validation-backend" {
   validation_record_fqdns = [aws_route53_record.backend-validation-record.fqdn]
   provider                = aws.virginia
 
-  depends_on = [aws_route53_zone.backend]
+  depends_on = [aws_route53_zone.backend, aws_route53_record.backend-name-server]
 }
