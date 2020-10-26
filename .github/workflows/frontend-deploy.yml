@@ -16,6 +16,8 @@ jobs:
     timeout-minutes: 300
     container:
       image: node:latest
+      env:
+          REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2.0.0
