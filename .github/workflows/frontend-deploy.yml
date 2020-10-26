@@ -26,7 +26,7 @@ jobs:
         env:
           REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
         run: |
-          npm run build
+          export REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL && npm run build
         working-directory: ./web
       - name: Upload artifact
         uses: actions/upload-artifact@v2
