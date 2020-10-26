@@ -1,4 +1,3 @@
-// tslint:disable
 /// <reference path="./custom.d.ts" />
 /**
  * FastAPI
