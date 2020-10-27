@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DefaultApi } from "../../api/api";
+import { useApi } from "../../hooks/api";
 import { Blog } from "../../api/api";
 import {
   Container,
@@ -21,7 +21,7 @@ import { Link } from "react-router-dom";
 import { useRootContext } from "../../context";
 
 const Admin: React.FC = () => {
-  const api = new DefaultApi();
+  const api = useApi();
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(true);
   const { access } = useRootContext();

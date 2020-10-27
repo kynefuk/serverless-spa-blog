@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { DefaultApi } from "../../api/api";
+import { useApi } from "../../hooks/api";
 import { Blog } from "../../api/api";
 import { List, ListItem, Container, Grid, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const BlogList: React.FC = () => {
-  const api = new DefaultApi();
+  const api = useApi();
+
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
   useEffect(() => {

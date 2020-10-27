@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useApi } from "../../hooks/api";
 import { useParams } from "react-router-dom";
-import { DefaultApi } from "../../api/api";
 import { Blog as ResBlog } from "../../api/api";
 import marked from "marked";
 import hljs from "highlightjs";
@@ -16,7 +16,7 @@ marked.setOptions({
 });
 
 const Blog: React.FC = () => {
-  const api = new DefaultApi();
+  const api = useApi();
   const { id } = useParams<{ id: string }>();
   const [blog, setBlog] = useState<ResBlog>();
 

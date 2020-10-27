@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { DefaultApi } from "../../api/api";
+import { useApi } from "../../hooks/api";
 import {
   Button,
   TextField,
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = () => {
-  const api = new DefaultApi();
+  const api = useApi();
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

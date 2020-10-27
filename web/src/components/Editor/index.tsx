@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Blog, DefaultApi } from "../../api/api";
+import { Blog } from "../../api/api";
+import { useApi } from "../../hooks/api";
 import "easymde/dist/easymde.min.css";
 import SimpleMED from "react-simplemde-editor";
 import marked from "marked";
@@ -30,7 +31,7 @@ const Editor: React.FC<RouteComponentProps<
   StaticContext,
   LocationState
 >> = (props?) => {
-  const api = new DefaultApi();
+  const api = useApi();
   const history = useHistory();
   const { access } = useRootContext();
   let blog: Blog | undefined;
