@@ -42,6 +42,8 @@ functions:
       MYSQL_DATABASE_URL: ${self:custom.envFile.SampleDBURL}
       SECRET_KEY: ${self:custom.envFile.SecretKey}
       CORS_ALLOWED_ORIGIN: ${self:custom.envFile.CORS_ALLOWED_ORIGIN}
+      PROJECT_NAME: blogs
+      DEBUG: False
 
 custom:
   defaultStage: dev

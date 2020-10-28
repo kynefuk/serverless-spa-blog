@@ -17,8 +17,8 @@ jobs:
     container:
       image: node:latest
       env:
-        # REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
-        REACT_APP_BACKEND_URL: https://api.kata-oji.com
+        REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
+        # REACT_APP_BACKEND_URL: https://api.kata-oji.com
     steps:
       - name: Checkout
         uses: actions/checkout@v2.0.0
@@ -26,11 +26,11 @@ jobs:
         run: npm install
         working-directory: ./web
       - name: Build
-        env:
-          REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
+        # env:
+        #   REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
         run: |
           echo "$REACT_APP_BACKEND_URL"
-          export REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL && npm run build
+          npm run build
         working-directory: ./web
       - name: Upload artifact
         uses: actions/upload-artifact@v2
