@@ -1,4 +1,4 @@
-service: server
+service: blog-backend
 frameworkVersion: '2'
 
 provider:
@@ -9,10 +9,10 @@ provider:
   region: ap-northeast-1
   vpc:
     subnetIds:
-      - !Ref SamplePublicSubnet1a
-      - !Ref SamplePublicSubnet1c
+      - !Ref PublicSubnet1a
+      - !Ref PublicSubnet1c
     securityGroupIds:
-      - !Ref SampleSGForLambda
+      - !Ref SGForLambda
   timeout: 300
   logRetentionInDays: 7
 
@@ -20,6 +20,7 @@ package:
   exclude:
     - .vscode
     - alembic
+    - node_modules
     - .devcontainer.json
     - .dockerignore
     - .flake8
@@ -28,6 +29,8 @@ package:
     - Dockerfile
     - Makefile
     - serverless.yml
+    - package-lock.json
+    - package.json
 
 functions:
   app:
@@ -39,7 +42,13 @@ functions:
           private: false
           cors: true
     environment:
-      MYSQL_DATABASE_URL: ${self:custom.envFile.SampleDBURL}
+      MYSQL_DATABASE_URL:
+        Fn::GetAtt:
+          - DBCluster
+          - Endpoint.Address
+      DB_NAME: ${self:custom.envFile.DB_NAME}
+      DB_USER: ${self:custom.envFile.MasterUsername}
+      DB_PASSWORD: ${self:custom.envFile.MasterUserPassword}
       SECRET_KEY: ${self:custom.envFile.SecretKey}
       CORS_ALLOWED_ORIGIN: ${self:custom.envFile.CORS_ALLOWED_ORIGIN}
       PROJECT_NAME: blogs
@@ -60,165 +69,165 @@ custom:
 
 resources:
   Resources:
-    SampleVPC:
+    VPC:
       Type: AWS::EC2::VPC
       DeletionPolicy: Delete
       Properties:
         CidrBlock: 10.0.0.0/16
         Tags:
           - Key: Name
-            Value: SampleVPC
+            Value: ${self:provider.stage}-VPC
 
-    SampleInternetGateway:
+    InternetGateway:
       Type: AWS::EC2::InternetGateway
       Properties:
         Tags:
           - Key: Name
-            Value: SampleInternetGateway
+            Value: ${self:provider.stage}-IG
 
     VPCGatewayAttachment:
       Type: AWS::EC2::VPCGatewayAttachment
       Properties:
         VpcId:
-          Ref: SampleVPC
+          Ref: VPC
         InternetGatewayId:
-          Ref: SampleInternetGateway
+          Ref: InternetGateway
 
-    SampleElasticIp:
+    ElasticIp:
       Type: AWS::EC2::EIP
       Properties:
         Domain: vpc
 
-    SamplePublicSubnet1a:
-      DependsOn: [SampleVPC]
+    PublicSubnet1a:
+      DependsOn: [VPC]
       Type: AWS::EC2::Subnet
       Properties:
         VpcId:
-          Ref: SampleVPC
+          Ref: VPC
         CidrBlock: 10.0.1.0/24
         Tags:
           - Key: Name
-            Value: SamplePublicSubnet1a
+            Value: ${self:provider.stage}-PublicSubnet1a
 
-    SamplePublicSubnet1c:
-      DependsOn: [SampleVPC]
+    PublicSubnet1c:
+      DependsOn: [VPC]
       Type: AWS::EC2::Subnet
       Properties:
         VpcId:
-          Ref: SampleVPC
+          Ref: VPC
         CidrBlock: 10.0.2.0/24
         Tags:
           - Key: Name
-            Value: SamplePublicSubnet1c
+            Value: ${self:provider.stage}-PublicSubnet1c
 
-    SamplePrivateSubnet1a:
-      DependsOn: [SampleVPC]
+    PrivateSubnet1a:
+      DependsOn: [VPC]
       Type: AWS::EC2::Subnet
       Properties:
         VpcId:
-          Ref: SampleVPC
+          Ref: VPC
         AvailabilityZone: ap-northeast-1a
         CidrBlock: 10.0.3.0/24
         Tags:
           - Key: Name
-            Value: SamplePrivateSubnet1a
+            Value: ${self:provider.stage}-PrivateSubnet1a
 
-    SamplePrivateSubnet1c:
-      DependsOn: [SampleVPC]
+    PrivateSubnet1c:
+      DependsOn: [VPC]
       Type: AWS::EC2::Subnet
       Properties:
         VpcId:
-          Ref: SampleVPC
+          Ref: VPC
         AvailabilityZone: ap-northeast-1c
         CidrBlock: 10.0.4.0/24
         Tags:
           - Key: Name
-            Value: SamplePrivateSubnet1c
+            Value: ${self:provider.stage}-PrivateSubnet1c
 
-    SamplePublicRouteTable:
+    PublicRouteTable:
       Type: AWS::EC2::RouteTable
       Properties:
         VpcId:
-          Ref: SampleVPC
+          Ref: VPC
         Tags:
           - Key: Name
-            Value: SamplePublicRouteTable
+            Value: ${self:provider.stage}-PublicRouteTable
 
-    SamplePublicRoute:
+    PublicRoute:
       Type: AWS::EC2::Route
       Properties:
         RouteTableId:
-          Ref: SamplePublicRouteTable
+          Ref: PublicRouteTable
         DestinationCidrBlock: 0.0.0.0/0
         GatewayId:
-          Ref: SampleInternetGateway
+          Ref: InternetGateway
 
     SubnetRouteTableAssociationPublicSubnet1a:
       Type: AWS::EC2::SubnetRouteTableAssociation
       Properties:
         SubnetId:
-          Ref: SamplePublicSubnet1a
+          Ref: PublicSubnet1a
         RouteTableId:
-          Ref: SamplePublicRouteTable
+          Ref: PublicRouteTable
 
     SubnetRouteTableAssociationPublicSubnet1c:
       Type: AWS::EC2::SubnetRouteTableAssociation
       Properties:
         SubnetId:
-          Ref: SamplePublicSubnet1c
+          Ref: PublicSubnet1c
         RouteTableId:
-          Ref: SamplePublicRouteTable
+          Ref: PublicRouteTable
 
-    SampleApiGatewayRestApi:
+    ApiGateway:
       Type: AWS::ApiGateway::RestApi
       DeletionPolicy: Delete
       Properties:
         EndpointConfiguration:
           Types:
             - REGIONAL
-        Name: SampleApiGatewayRestApi
+        Name: ${self:provider.stage}-ApiGateway
 
-    SampleSGForDB:
-      DependsOn: SampleVPC
+    SGForDB:
+      DependsOn: VPC
       Type: AWS::EC2::SecurityGroup
       Properties:
-        GroupDescription: SecurityGroup for DB
-        GroupName: SampleSGForDB
+        GroupDescription: ${self:provider.stage} SG for DB
+        GroupName: ${self:provider.stage}-SG-DB
         SecurityGroupIngress:
           - IpProtocol: tcp
             FromPort: 3306
             ToPort: 3306
             SourceSecurityGroupId:
-              Ref: SampleSGForLambda
+              Ref: SGForLambda
         VpcId:
-          Ref: SampleVPC
+          Ref: VPC
 
-    SampleSGForLambda:
-      DependsOn: SampleVPC
+    SGForLambda:
+      DependsOn: VPC
       Type: AWS::EC2::SecurityGroup
       Properties:
-        GroupDescription: SecurityGroup for Lambda
-        GroupName: SampleSGForLambda
+        GroupDescription: ${self:provider.stage} SG for Lambda
+        GroupName: ${self:provider.stage}-SG-Lambda
         SecurityGroupIngress:
           - IpProtocol: tcp
             FromPort: 443
             ToPort: 443
             CidrIp: 0.0.0.0/0
         VpcId:
-          Ref: SampleVPC
+          Ref: VPC
 
-    SampleDBSubnetGroup:
+    DBSubnetGroup:
       Type: AWS::RDS::DBSubnetGroup
       Properties:
-        DBSubnetGroupDescription: SampleDBSubnetGroup
+        DBSubnetGroupDescription: ${self:provider.stage} DB Subnet Group
         SubnetIds:
-          - !Ref SamplePrivateSubnet1a
-          - !Ref SamplePrivateSubnet1c
+          - !Ref PrivateSubnet1a
+          - !Ref PrivateSubnet1c
 
-    SampleDBParameterGroup:
+    DBParameterGroup:
       Type: AWS::RDS::DBClusterParameterGroup
       Properties:
-        Description: Sample Parameter Group for Aurora Serverless
+        Description: ${self:provider.stage} Parameter Group for Aurora Serverless
         Family: aurora5.6
         Parameters:
           server_audit_logging: 0
@@ -229,17 +238,17 @@ resources:
           character_set_server: utf8mb4
           skip-character-set-client-handshake: 1
 
-    SampleDBCluster:
-      DependsOn: SampleDBSubnetGroup
+    DBCluster:
+      DependsOn: DBSubnetGroup
       Type: AWS::RDS::DBCluster
       Properties:
-        DBClusterIdentifier: SampleDBCluster
+        DBClusterIdentifier: DBCluster
         DatabaseName: blog
         DBSubnetGroupName:
-          Ref: SampleDBSubnetGroup
+          Ref: DBSubnetGroup
         DBClusterParameterGroupName:
-          Ref: SampleDBParameterGroup
-        DeletionProtection: false
+          Ref: DBParameterGroup
+        DeletionProtection: true
         Engine: aurora
         EngineMode: serverless
         EngineVersion: 5.6.10a
@@ -250,11 +259,11 @@ resources:
           AutoPause: true
           MaxCapacity: 2
           SecondsUntilAutoPause: 1800
-        MasterUsername: ${self:custom.envFile.SampleMasterUsername}
-        MasterUserPassword: ${self:custom.envFile.SampleMasterUserPassword}
+        MasterUsername: ${self:custom.envFile.MasterUsername}
+        MasterUserPassword: ${self:custom.envFile.MasterUserPassword}
         Port: 3306
         VpcSecurityGroupIds:
-          - !Ref SampleSGForDB
+          - !Ref SGForDB
 plugins:
   - serverless-python-requirements
   - serverless-domain-manager
