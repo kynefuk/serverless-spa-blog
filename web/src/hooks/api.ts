@@ -3,6 +3,11 @@ import { DefaultApi } from "../api/api";
 
 export const useApi = () => {
   return useMemo(() => {
-    return new DefaultApi();
+    const options = {
+      baseOptions: {
+        timeout: 450000,
+      },
+    };
+    return new DefaultApi(options);
   }, []);
 };
