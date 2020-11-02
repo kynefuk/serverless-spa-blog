@@ -32,6 +32,23 @@ package:
     - package-lock.json
     - package.json
 
+plugins:
+  - serverless-python-requirements
+  # - serverless-domain-manager
+
+custom:
+  defaultStage: dev
+  envFile: ${file(./.env.yml)}
+  pythonRequirements:
+    dockerizePip: false
+    usePoetry: false
+  # customDomain:
+  #   domainName: ${self:custom.envFile.CUSTOM_DOMAIN}
+  #   basePath: ""
+  #   stage: ${self:provider.stage}
+  #   createRoute53Record: true
+  #   certificateName: ${self:custom.envFile.CUSTOM_DOMAIN}
+
 functions:
   app:
     handler: apps.main.handler
@@ -53,19 +70,6 @@ functions:
       CORS_ALLOWED_ORIGIN: ${self:custom.envFile.CORS_ALLOWED_ORIGIN}
       PROJECT_NAME: blogs
       DEBUG: False
-
-custom:
-  defaultStage: dev
-  envFile: ${file(./.env.yml)}
-  pythonRequirements:
-    dockerizePip: false
-    usePoetry: false
-  customDomain:
-    domainName: ${self:custom.envFile.CUSTOM_DOMAIN}
-    basePath: ""
-    stage: ${self:provider.stage}
-    createRoute53Record: true
-    certificateName: ${self:custom.envFile.CUSTOM_DOMAIN}
 
 resources:
   Resources:
@@ -264,6 +268,113 @@ resources:
         Port: 3306
         VpcSecurityGroupIds:
           - !Ref SGForDB
-plugins:
-  - serverless-python-requirements
-  - serverless-domain-manager
+
+    FrontendBucket:
+      Type: "AWS::S3::Bucket"
+      Properties:
+        BucketName: ${self:provider.stage}-frontend-origin
+        Tags:
+          - Key: "Name"
+            Value: ${self:provider.stage}-frontend-origin
+
+    # BucketPolicy:
+    #   Type: "AWS::S3::BucketPolicy"
+    #   Properties:
+    #     Bucket: !Ref FrontendBucket
+    #     PolicyDocument:
+    #       Statement:
+    #       - Action: "s3:GetObject"
+    #         Effect: Allow
+    #         Resource: !Sub "arn:aws:s3:::${FrontendBucket}/*"
+    #         Principal:
+    #           CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
+    
+    DomainHostedZone:
+      Type: AWS::Route53::HostedZone
+      Properties:
+        HostedZoneConfig:
+          Comment: ${self:provider.stage} Domain Hosted Zone.
+        HostedZoneTags: 
+          - Key: "Environment"
+            Value: ${self:provider.stage}
+        Name: ${self:custom.envFile.FRONTEND_DOMAIN}
+
+    BackendACM:
+      Type: AWS::CertificateManager::Certificate
+      Properties: 
+        DomainName: ${self:custom.envFile.CUSTOM_DOMAIN}
+        DomainValidationOptions: 
+          - DomainName: ${self:custom.envFile.CUSTOM_DOMAIN}
+            HostedZoneId: !Ref DomainHostedZone
+        Tags: 
+          - Key: "Name"
+            Value: ${self:provider.stage}-backend-acm
+        ValidationMethod: "DNS"
+      DependsOn: DomainHostedZone
+    
+    # FrontendRecord:
+    #   Type: AWS::Route53::RecordSet
+    #   Properties:
+    #     HostedZoneName: !Ref 'DomainHostedZone'
+    #     Comment: ${self:provider.stage} Frontend record.
+    #     Name: ${self:custom.envFile.FRONTEND_DOMAIN}
+    #     Type: A
+    #     TTL: '900'
+    #     ResourceRecords:
+    #     - !GetAtt CloudFront.DomainName
+
+    # FrontendACM:
+    #   Type: AWS::CertificateManager::Certificate
+    #   Properties: 
+    #     DomainName: !GetAtt DomainHostedZone.Name
+    #     DomainValidationOptions: 
+    #       DomainName: !GetAtt DomainHostedZone.Name
+    #       HostedZoneId: !Ref DomainHostedZone
+    #     Tags: 
+    #       Key: "Name"
+    #       Value: ${self:provider.stage}-frontend-acm
+    #     ValidationMethod: "DNS"
+    #     DependsOn: DomainHostedZone, FrontendRecord
+    
+    # CloudFrontOriginAccessIdentity:
+    #   Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity"
+    #   Properties:
+    #     CloudFrontOriginAccessIdentityConfig:
+    #       Comment: ${self:provider.stage} OAI
+
+    # CloudFront:
+    # Type: AWS::CloudFront::Distribution
+    # Properties: 
+    #   DistributionConfig:
+    #     PriceClass: PriceClass_200
+    #     Aliases:
+    #     - ${self:custom.envFile.FRONTEND_DOMAIN}
+    #     Origins:
+    #     - DomainName: !GetAtt FrontendBucket.DomainName
+    #       Id: ${self:provider.stage}-Frontend-origin
+    #       S3OriginConfig:
+    #         OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
+    #     DefaultRootObject: index.html
+    #     DefaultCacheBehavior:
+    #       TargetOriginId: ${self:provider.stage}-Frontend-origin
+    #       ViewerProtocolPolicy: redirect-to-https
+    #       AllowedMethods:
+    #       - GET
+    #       - HEAD
+    #       CachedMethods:
+    #       - GET
+    #       - HEAD
+    #       DefaultTTL: 3600
+    #       MaxTTL: 86400
+    #       MinTTL: 60
+    #       Compress: true
+    #       ForwardedValues:
+    #         Cookies:
+    #           Forward: none
+    #         QueryString: false
+    #     ViewerCertificate:
+    #       SslSupportMethod: sni-only
+    #       MinimumProtocolVersion: TLSv1.2_2019
+    #       AcmCertificateArn: !Sub "arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/${CFSSLCertificateId}"
+    #     HttpVersion: http2
+    #     Enabled: true
