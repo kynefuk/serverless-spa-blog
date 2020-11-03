@@ -31,15 +31,15 @@ resource "aws_s3_bucket_policy" "cloudfront-to-s3" {
 }
 
 
-resource "aws_s3_bucket" "cloudfront_log" {
-  bucket = "${terraform.workspace}-cloudfront-log-bucket"
-  acl    = "private"
+# resource "aws_s3_bucket" "cloudfront_log" {
+#   bucket = "${terraform.workspace}-cloudfront-log-bucket"
+#   acl    = "private"
 
-  tags = {
-    Name        = "${terraform.workspace}-blog"
-    Environment = terraform.workspace
-  }
-}
+#   tags = {
+#     Name        = "${terraform.workspace}-blog"
+#     Environment = terraform.workspace
+#   }
+# }
 
 # data "aws_iam_policy_document" "cloudfront_log" {
 #   statement {

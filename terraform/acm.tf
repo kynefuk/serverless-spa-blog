@@ -17,19 +17,17 @@ resource "aws_acm_certificate_validation" "wait-validation-frontend" {
 resource "aws_acm_certificate" "backend" {
   domain_name       = var.backend[terraform.workspace]
   validation_method = "DNS"
-  provider          = aws.virginia
 
   lifecycle {
     create_before_destroy = true
   }
 
-  depends_on = [aws_route53_zone.blog-domain]
+  depends_on = [aws_route53_zone.blog-domain, aws_route53_record.backend-name-server]
 }
 
 resource "aws_acm_certificate_validation" "wait-validation-backend" {
   certificate_arn         = aws_acm_certificate.backend.arn
   validation_record_fqdns = [aws_route53_record.backend-validation-record.fqdn]
-  provider                = aws.virginia
 
-  depends_on = [aws_route53_zone.blog-domain]
+  depends_on = [aws_route53_zone.blog-domain, aws_route53_record.backend-name-server, aws_route53_record.backend-validation-record]
 }

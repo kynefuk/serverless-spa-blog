@@ -1,3 +1,11 @@
+variable "environment" {
+  type = map(string)
+  default = {
+    stg  = "stg"
+    prod = "prod"
+  }
+}
+
 variable "frontend" {
   type = map(string)
   default = {
@@ -13,3 +21,7 @@ variable "backend" {
     prod = "api.naaam.dev"
   }
 }
+
+variable "db_master_user" {}
+
+variable "db_master_password" {}

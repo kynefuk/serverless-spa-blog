@@ -55,4 +55,6 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2019"
   }
+
+  depends_on = [aws_acm_certificate.frontend]
 }
