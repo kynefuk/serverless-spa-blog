@@ -1,5 +1,5 @@
 resource "aws_vpc" "blog-vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.production-vpc.cidr
 
   tags = {
     Name        = "${var.environment[terraform.workspace]}-blog-vpc"
@@ -48,10 +48,10 @@ resource "aws_route_table_association" "for-lambda" {
 }
 
 resource "aws_subnet" "for-rds" {
-  count             = 2
+  count             = length(var.production-vpc.subnets)
   vpc_id            = aws_vpc.blog-vpc.id
-  cidr_block        = "10.0.${count.index + 1}.0/24"
-  availability_zone = "value"
+  cidr_block        = values(var.production-vpc.subnets)[count.index].cidr
+  availability_zone = values(var.production-vpc.subnets)[count.index].availability_zone
 
   tags = {
     Name        = "${var.environment[terraform.workspace]}-subnet-for-rds"

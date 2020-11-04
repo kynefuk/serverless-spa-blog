@@ -1,5 +1,6 @@
 resource "aws_route53_zone" "blog-domain" {
-  name = var.frontend[terraform.workspace]
+  name          = var.frontend[terraform.workspace]
+  force_destroy = false
 }
 
 resource "aws_route53_record" "frontend" {

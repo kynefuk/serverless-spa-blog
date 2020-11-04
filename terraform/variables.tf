@@ -22,6 +22,23 @@ variable "backend" {
   }
 }
 
+variable "production-vpc" {
+  default = {
+    name = "production-vpc"
+    cidr = "10.0.0.0/16"
+    subnets = {
+      subnet1 = {
+        availability_zone = "ap-northeast-1a"
+        cidr              = "10.0.1.0/24"
+      }
+      subnet2 = {
+        availability_zone = "ap-northeast-1c"
+        cidr              = "10.0.2.0/24"
+      }
+    }
+  }
+}
+
 variable "db_master_user" {}
 
 variable "db_master_password" {}

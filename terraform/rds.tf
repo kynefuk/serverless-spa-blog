@@ -1,16 +1,26 @@
 resource "aws_rds_cluster" "aurora-cluster" {
-  cluster_identifier = "${var.environment[terraform.workspace]}-cluster"
-  engine             = "aurora-mysql"
-  # engine_version          = "5.6.10a"
-  engine_mode             = "serverless"
-  availability_zones      = ["ap-northeast-1a", "ap-northeast-1c"]
-  database_name           = "blog"
-  master_username         = var.db_master_user
-  master_password         = var.db_master_password
-  apply_immediately       = true
-  backup_retention_period = 5
-  preferred_backup_window = "07:00-09:00"
-  db_subnet_group_name    = aws_db_subnet_group.default.id
+  cluster_identifier        = "${var.environment[terraform.workspace]}-cluster"
+  engine                    = "aurora-mysql"
+  engine_version            = "5.7.12"
+  engine_mode               = "serverless"
+  availability_zones        = ["ap-northeast-1a", "ap-northeast-1c"]
+  database_name             = "blog"
+  master_username           = var.db_master_user
+  master_password           = var.db_master_password
+  apply_immediately         = true
+  backup_retention_period   = 5
+  preferred_backup_window   = "07:00-09:00"
+  db_subnet_group_name      = aws_db_subnet_group.default.id
+  final_snapshot_identifier = "${var.environment[terraform.workspace]}-cluster-final-snapshot"
+  skip_final_snapshot       = false
+  source_region             = "ap-northeast-1"
+
+  scaling_configuration {
+    auto_pause               = true
+    max_capacity             = 1
+    min_capacity             = 1
+    seconds_until_auto_pause = 300
+  }
 
   tags = {
     Name        = "${var.environment[terraform.workspace]}-aurora-cluster"
