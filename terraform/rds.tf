@@ -1,19 +1,20 @@
 resource "aws_rds_cluster" "aurora-cluster" {
-  cluster_identifier        = "${var.environment[terraform.workspace]}-cluster"
-  engine                    = "aurora-mysql"
-  engine_version            = "5.7.12"
-  engine_mode               = "serverless"
-  availability_zones        = ["ap-northeast-1a", "ap-northeast-1c"]
-  database_name             = "blog"
-  master_username           = var.db_master_user
-  master_password           = var.db_master_password
-  apply_immediately         = true
-  backup_retention_period   = 5
-  preferred_backup_window   = "07:00-09:00"
-  db_subnet_group_name      = aws_db_subnet_group.default.id
-  final_snapshot_identifier = "${var.environment[terraform.workspace]}-cluster-final-snapshot"
-  skip_final_snapshot       = false
-  source_region             = "ap-northeast-1"
+  cluster_identifier              = "${var.environment[terraform.workspace]}-cluster"
+  engine_mode                     = "serverless"
+  availability_zones              = ["ap-northeast-1a", "ap-northeast-1c"]
+  database_name                   = "blog"
+  master_username                 = var.db_master_user
+  master_password                 = var.db_master_password
+  apply_immediately               = true
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.default.id
+  backup_retention_period         = 5
+  preferred_backup_window         = "07:00-09:00"
+  db_subnet_group_name            = aws_db_subnet_group.default.id
+  final_snapshot_identifier       = "${var.environment[terraform.workspace]}-cluster-final-snapshot"
+  skip_final_snapshot             = true
+  source_region                   = "ap-northeast-1"
+  deletion_protection             = false
+  vpc_security_group_ids          = [aws_security_group.for-rds.id]
 
   scaling_configuration {
     auto_pause               = true
@@ -77,19 +78,5 @@ resource "aws_rds_cluster_parameter_group" "default" {
     name         = "character_set_client"
     value        = "utf8mb4"
     apply_method = "pending-reboot"
-  }
-}
-
-resource "aws_rds_cluster_instance" "cluster_instance" {
-  count              = 1
-  identifier         = "${var.environment[terraform.workspace]}-instance"
-  cluster_identifier = aws_rds_cluster.aurora-cluster.id
-  instance_class     = "db.t3.micro"
-  engine             = aws_rds_cluster.aurora-cluster.engine
-  engine_version     = aws_rds_cluster.aurora-cluster.engine_version
-
-  tags = {
-    Name        = "${var.environment[terraform.workspace]}-instance"
-    Environment = var.environment[terraform.workspace]
   }
 }
