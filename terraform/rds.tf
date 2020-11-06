@@ -7,14 +7,17 @@ resource "aws_rds_cluster" "aurora-cluster" {
   master_password                 = var.db_master_password
   apply_immediately               = true
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.default.id
-  backup_retention_period         = 5
-  preferred_backup_window         = "07:00-09:00"
+  backup_retention_period         = 0
+  preferred_backup_window         = "02:00-02:30"
+  preferred_maintenance_window    = "Sun:04:00-Sun:04:30"
   db_subnet_group_name            = aws_db_subnet_group.default.id
-  final_snapshot_identifier       = "${var.environment[terraform.workspace]}-cluster-final-snapshot"
-  skip_final_snapshot             = true
   source_region                   = "ap-northeast-1"
   deletion_protection             = false
+  enable_http_endpoint            = true
+  storage_encrypted               = true
   vpc_security_group_ids          = [aws_security_group.for-rds.id]
+  final_snapshot_identifier       = "${var.environment[terraform.workspace]}-cluster-final-snapshot"
+  skip_final_snapshot             = false
 
   scaling_configuration {
     auto_pause               = true

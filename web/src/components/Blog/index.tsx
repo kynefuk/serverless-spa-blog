@@ -31,9 +31,16 @@ const Blog: React.FC = () => {
 
   return (
     <Container>
-      <Grid container justify="center" alignItems="center">
-        <Typography variant="h3">{blog?.title}</Typography>
-        <div id="body">
+      <Grid
+        container
+        justify="center"
+        alignItems="center"
+        alignContent="center"
+      >
+        <div id="content">
+          <Typography variant="h3" align="center">
+            {blog?.title}
+          </Typography>
           <span
             dangerouslySetInnerHTML={{ __html: marked(blog?.content || "") }}
           />
