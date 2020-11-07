@@ -58,4 +58,4 @@ jobs:
           FRONTEND_BUCKET: ${{ secrets.FRONTEND_BUCKET_NAME }}
           REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
         run: |
-          aws s3 cp --recursive ./web/build s3://stg-frontend-origin
+          aws s3 cp --recursive ./web/build s3://$FRONTEND_BUCKET
