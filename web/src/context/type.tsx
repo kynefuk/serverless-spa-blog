@@ -1,4 +1,4 @@
-import { AccessTokenAction, ErrorAction } from "../action/index";
+import { AccessTokenAction, ErrorAction, LoadingAction } from "../action/index";
 
 type AccessTokenContextType = {
   access: string;
@@ -10,4 +10,11 @@ type ErrorContextType = {
   dispatchErrorMessage: React.Dispatch<ErrorAction>;
 };
 
-export type RootContextType = AccessTokenContextType & ErrorContextType;
+type LoadingContextType = {
+  loading: boolean;
+  dispatchLoading: React.Dispatch<LoadingAction>;
+};
+
+export type RootContextType = AccessTokenContextType &
+  ErrorContextType &
+  LoadingContextType;

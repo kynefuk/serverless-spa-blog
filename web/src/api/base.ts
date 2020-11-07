@@ -13,6 +13,18 @@
 
 import { Configuration } from "./configuration";
 import globalAxios, { AxiosInstance } from "axios";
+// import { useRootContext } from "../context/index";
+// import { LoadingActionType } from "../action/type";
+
+// const { dispatchLoading } = useRootContext();
+
+// globalAxios.interceptors.request.use((config) => {
+//   dispatchLoading({
+//     type: LoadingActionType.LOADING_TRUE,
+//     payload: true,
+//   });
+//   return config;
+// });
 
 export const BASE_PATH =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:7000";

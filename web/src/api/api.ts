@@ -12,15 +12,10 @@
  * Do not edit the class manually.
  */
 
-import * as globalImportUrl from 'url';
-import { Configuration } from './configuration';
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import {
-  BASE_PATH,
-  RequestArgs,
-  BaseAPI,
-  RequiredError,
-} from './base';
+import * as globalImportUrl from "url";
+import { Configuration } from "./configuration";
+import globalAxios, { AxiosPromise, AxiosInstance } from "axios";
+import { BASE_PATH, RequestArgs, BaseAPI, RequiredError } from "./base";
 
 /**
  *
@@ -264,8 +259,8 @@ export const DefaultApiAxiosParamCreator = function (
       // verify required parameter 'blogCreate' is not null or undefined
       if (blogCreate === null || blogCreate === undefined) {
         throw new RequiredError(
-          'blogCreate',
-          'Required parameter blogCreate was null or undefined when calling createBlogBlogsPost.'
+          "blogCreate",
+          "Required parameter blogCreate was null or undefined when calling createBlogBlogsPost."
         );
       }
       const localVarPath = `/blogs/`;
@@ -275,7 +270,7 @@ export const DefaultApiAxiosParamCreator = function (
         baseOptions = configuration.baseOptions;
       }
       const localVarRequestOptions = {
-        method: 'POST',
+        method: "POST",
         ...baseOptions,
         ...options,
       };
@@ -286,14 +281,14 @@ export const DefaultApiAxiosParamCreator = function (
       // oauth required
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
-          typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2PasswordBearer', [])
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("OAuth2PasswordBearer", [])
             : configuration.accessToken;
-        localVarHeaderParameter['Authorization'] =
-          'Bearer ' + localVarAccessTokenValue;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
       }
 
-      localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter["Content-Type"] = "application/json";
 
       localVarUrlObj.query = {
         ...localVarUrlObj.query,
@@ -308,11 +303,11 @@ export const DefaultApiAxiosParamCreator = function (
       };
       // eslint-disable-next-line
       const needsSerialization =
-        'BlogCreate' as any !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        ("BlogCreate" as any) !== "string" ||
+        localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(blogCreate !== undefined ? blogCreate : {})
-        : blogCreate || '';
+        : blogCreate || "";
 
       return {
         url: globalImportUrl.format(localVarUrlObj),
@@ -333,8 +328,8 @@ export const DefaultApiAxiosParamCreator = function (
       // verify required parameter 'userCreate' is not null or undefined
       if (userCreate === null || userCreate === undefined) {
         throw new RequiredError(
-          'userCreate',
-          'Required parameter userCreate was null or undefined when calling createUserUsersPost.'
+          "userCreate",
+          "Required parameter userCreate was null or undefined when calling createUserUsersPost."
         );
       }
       const localVarPath = `/users/`;
@@ -344,14 +339,14 @@ export const DefaultApiAxiosParamCreator = function (
         baseOptions = configuration.baseOptions;
       }
       const localVarRequestOptions = {
-        method: 'POST',
+        method: "POST",
         ...baseOptions,
         ...options,
       };
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter["Content-Type"] = "application/json";
 
       localVarUrlObj.query = {
         ...localVarUrlObj.query,
@@ -366,11 +361,11 @@ export const DefaultApiAxiosParamCreator = function (
       };
       // eslint-disable-next-line
       const needsSerialization =
-        'UserCreate' as any !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        ("UserCreate" as any) !== "string" ||
+        localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(userCreate !== undefined ? userCreate : {})
-        : userCreate || '';
+        : userCreate || "";
 
       return {
         url: globalImportUrl.format(localVarUrlObj),
@@ -391,12 +386,12 @@ export const DefaultApiAxiosParamCreator = function (
       // verify required parameter 'blogId' is not null or undefined
       if (blogId === null || blogId === undefined) {
         throw new RequiredError(
-          'blogId',
-          'Required parameter blogId was null or undefined when calling deleteBlogBlogsBlogIdDelete.'
+          "blogId",
+          "Required parameter blogId was null or undefined when calling deleteBlogBlogsBlogIdDelete."
         );
       }
       const localVarPath = `/blogs/{blog_id}/`.replace(
-        `{${'blog_id'}}`,
+        `{${"blog_id"}}`,
         encodeURIComponent(String(blogId))
       );
       const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
@@ -405,7 +400,7 @@ export const DefaultApiAxiosParamCreator = function (
         baseOptions = configuration.baseOptions;
       }
       const localVarRequestOptions = {
-        method: 'DELETE',
+        method: "DELETE",
         ...baseOptions,
         ...options,
       };
@@ -416,11 +411,11 @@ export const DefaultApiAxiosParamCreator = function (
       // oauth required
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
-          typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2PasswordBearer', [])
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("OAuth2PasswordBearer", [])
             : configuration.accessToken;
-        localVarHeaderParameter['Authorization'] =
-          'Bearer ' + localVarAccessTokenValue;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
       }
 
       localVarUrlObj.query = {
@@ -456,19 +451,19 @@ export const DefaultApiAxiosParamCreator = function (
       // verify required parameter 'blogId' is not null or undefined
       if (blogId === null || blogId === undefined) {
         throw new RequiredError(
-          'blogId',
-          'Required parameter blogId was null or undefined when calling editBlogBlogsBlogIdPatch.'
+          "blogId",
+          "Required parameter blogId was null or undefined when calling editBlogBlogsBlogIdPatch."
         );
       }
       // verify required parameter 'blogCreate' is not null or undefined
       if (blogCreate === null || blogCreate === undefined) {
         throw new RequiredError(
-          'blogCreate',
-          'Required parameter blogCreate was null or undefined when calling editBlogBlogsBlogIdPatch.'
+          "blogCreate",
+          "Required parameter blogCreate was null or undefined when calling editBlogBlogsBlogIdPatch."
         );
       }
       const localVarPath = `/blogs/{blog_id}`.replace(
-        `{${'blog_id'}}`,
+        `{${"blog_id"}}`,
         encodeURIComponent(String(blogId))
       );
       const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
@@ -477,7 +472,7 @@ export const DefaultApiAxiosParamCreator = function (
         baseOptions = configuration.baseOptions;
       }
       const localVarRequestOptions = {
-        method: 'PATCH',
+        method: "PATCH",
         ...baseOptions,
         ...options,
       };
@@ -488,14 +483,14 @@ export const DefaultApiAxiosParamCreator = function (
       // oauth required
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
-          typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2PasswordBearer', [])
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("OAuth2PasswordBearer", [])
             : configuration.accessToken;
-        localVarHeaderParameter['Authorization'] =
-          'Bearer ' + localVarAccessTokenValue;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
       }
 
-      localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter["Content-Type"] = "application/json";
 
       localVarUrlObj.query = {
         ...localVarUrlObj.query,
@@ -510,11 +505,11 @@ export const DefaultApiAxiosParamCreator = function (
       };
       // eslint-disable-next-line
       const needsSerialization =
-        'BlogCreate' as any !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        ("BlogCreate" as any) !== "string" ||
+        localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(blogCreate !== undefined ? blogCreate : {})
-        : blogCreate || '';
+        : blogCreate || "";
 
       return {
         url: globalImportUrl.format(localVarUrlObj),
@@ -532,12 +527,12 @@ export const DefaultApiAxiosParamCreator = function (
       // verify required parameter 'blogId' is not null or undefined
       if (blogId === null || blogId === undefined) {
         throw new RequiredError(
-          'blogId',
-          'Required parameter blogId was null or undefined when calling getBlogBlogsBlogIdGet.'
+          "blogId",
+          "Required parameter blogId was null or undefined when calling getBlogBlogsBlogIdGet."
         );
       }
       const localVarPath = `/blogs/{blog_id}/`.replace(
-        `{${'blog_id'}}`,
+        `{${"blog_id"}}`,
         encodeURIComponent(String(blogId))
       );
       const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
@@ -546,7 +541,7 @@ export const DefaultApiAxiosParamCreator = function (
         baseOptions = configuration.baseOptions;
       }
       const localVarRequestOptions = {
-        method: 'GET',
+        method: "GET",
         ...baseOptions,
         ...options,
       };
@@ -590,7 +585,7 @@ export const DefaultApiAxiosParamCreator = function (
         baseOptions = configuration.baseOptions;
       }
       const localVarRequestOptions = {
-        method: 'GET',
+        method: "GET",
         ...baseOptions,
         ...options,
       };
@@ -598,11 +593,11 @@ export const DefaultApiAxiosParamCreator = function (
       const localVarQueryParameter = {} as any;
 
       if (skip !== undefined) {
-        localVarQueryParameter['skip'] = skip;
+        localVarQueryParameter["skip"] = skip;
       }
 
       if (limit !== undefined) {
-        localVarQueryParameter['limit'] = limit;
+        localVarQueryParameter["limit"] = limit;
       }
 
       localVarUrlObj.query = {
@@ -642,7 +637,7 @@ export const DefaultApiAxiosParamCreator = function (
         baseOptions = configuration.baseOptions;
       }
       const localVarRequestOptions = {
-        method: 'GET',
+        method: "GET",
         ...baseOptions,
         ...options,
       };
@@ -650,11 +645,11 @@ export const DefaultApiAxiosParamCreator = function (
       const localVarQueryParameter = {} as any;
 
       if (skip !== undefined) {
-        localVarQueryParameter['skip'] = skip;
+        localVarQueryParameter["skip"] = skip;
       }
 
       if (limit !== undefined) {
-        localVarQueryParameter['limit'] = limit;
+        localVarQueryParameter["limit"] = limit;
       }
 
       localVarUrlObj.query = {
@@ -698,15 +693,15 @@ export const DefaultApiAxiosParamCreator = function (
       // verify required parameter 'username' is not null or undefined
       if (username === null || username === undefined) {
         throw new RequiredError(
-          'username',
-          'Required parameter username was null or undefined when calling loginForAccessTokenTokenPost.'
+          "username",
+          "Required parameter username was null or undefined when calling loginForAccessTokenTokenPost."
         );
       }
       // verify required parameter 'password' is not null or undefined
       if (password === null || password === undefined) {
         throw new RequiredError(
-          'password',
-          'Required parameter password was null or undefined when calling loginForAccessTokenTokenPost.'
+          "password",
+          "Required parameter password was null or undefined when calling loginForAccessTokenTokenPost."
         );
       }
       const localVarPath = `/token`;
@@ -716,7 +711,7 @@ export const DefaultApiAxiosParamCreator = function (
         baseOptions = configuration.baseOptions;
       }
       const localVarRequestOptions = {
-        method: 'POST',
+        method: "POST",
         ...baseOptions,
         ...options,
       };
@@ -725,31 +720,31 @@ export const DefaultApiAxiosParamCreator = function (
       const localVarFormParams = new URLSearchParams();
 
       if (grantType !== undefined) {
-        localVarFormParams.set('grant_type', grantType as any);
+        localVarFormParams.set("grant_type", grantType as any);
       }
 
       if (username !== undefined) {
-        localVarFormParams.set('username', username as any);
+        localVarFormParams.set("username", username as any);
       }
 
       if (password !== undefined) {
-        localVarFormParams.set('password', password as any);
+        localVarFormParams.set("password", password as any);
       }
 
       if (scope !== undefined) {
-        localVarFormParams.set('scope', scope as any);
+        localVarFormParams.set("scope", scope as any);
       }
 
       if (clientId !== undefined) {
-        localVarFormParams.set('client_id', clientId as any);
+        localVarFormParams.set("client_id", clientId as any);
       }
 
       if (clientSecret !== undefined) {
-        localVarFormParams.set('client_secret', clientSecret as any);
+        localVarFormParams.set("client_secret", clientSecret as any);
       }
 
-      localVarHeaderParameter['Content-Type'] =
-        'application/x-www-form-urlencoded';
+      localVarHeaderParameter["Content-Type"] =
+        "application/x-www-form-urlencoded";
 
       localVarUrlObj.query = {
         ...localVarUrlObj.query,
@@ -783,7 +778,7 @@ export const DefaultApiAxiosParamCreator = function (
         baseOptions = configuration.baseOptions;
       }
       const localVarRequestOptions = {
-        method: 'GET',
+        method: "GET",
         ...baseOptions,
         ...options,
       };
@@ -794,11 +789,11 @@ export const DefaultApiAxiosParamCreator = function (
       // oauth required
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
-          typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2PasswordBearer', [])
+          typeof configuration.accessToken === "function"
+            ? configuration.accessToken("OAuth2PasswordBearer", [])
             : configuration.accessToken;
-        localVarHeaderParameter['Authorization'] =
-          'Bearer ' + localVarAccessTokenValue;
+        localVarHeaderParameter["Authorization"] =
+          "Bearer " + localVarAccessTokenValue;
       }
 
       localVarUrlObj.query = {
@@ -832,8 +827,8 @@ export const DefaultApiAxiosParamCreator = function (
       // verify required parameter 'verifyToken' is not null or undefined
       if (verifyToken === null || verifyToken === undefined) {
         throw new RequiredError(
-          'verifyToken',
-          'Required parameter verifyToken was null or undefined when calling verifyAccessTokenTokenVerifyPost.'
+          "verifyToken",
+          "Required parameter verifyToken was null or undefined when calling verifyAccessTokenTokenVerifyPost."
         );
       }
       const localVarPath = `/token/verify`;
@@ -843,14 +838,14 @@ export const DefaultApiAxiosParamCreator = function (
         baseOptions = configuration.baseOptions;
       }
       const localVarRequestOptions = {
-        method: 'POST',
+        method: "POST",
         ...baseOptions,
         ...options,
       };
       const localVarHeaderParameter = {} as any;
       const localVarQueryParameter = {} as any;
 
-      localVarHeaderParameter['Content-Type'] = 'application/json';
+      localVarHeaderParameter["Content-Type"] = "application/json";
 
       localVarUrlObj.query = {
         ...localVarUrlObj.query,
@@ -865,11 +860,11 @@ export const DefaultApiAxiosParamCreator = function (
       };
       // eslint-disable-next-line
       const needsSerialization =
-        'VerifyToken' as any !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        ("VerifyToken" as any) !== "string" ||
+        localVarRequestOptions.headers["Content-Type"] === "application/json";
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(verifyToken !== undefined ? verifyToken : {})
-        : verifyToken || '';
+        : verifyToken || "";
 
       return {
         url: globalImportUrl.format(localVarUrlObj),

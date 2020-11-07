@@ -1,5 +1,9 @@
-import { AccessTokenAction, ErrorAction } from "../action/index";
-import { AccessTokenActionType, ErrorActionType } from "../action/type";
+import { AccessTokenAction, ErrorAction, LoadingAction } from "../action/index";
+import {
+  AccessTokenActionType,
+  ErrorActionType,
+  LoadingActionType,
+} from "../action/type";
 
 export const AccessTokenReducer = (
   state: string = "",
@@ -27,6 +31,22 @@ export const ErrorReducer = (state: string = "", action: ErrorAction) => {
     case ErrorActionType.DELETE_ERROR:
       localStorage.removeItem("error");
       return state;
+    default:
+      return state;
+  }
+};
+
+export const LoadingReducer = (
+  state: boolean = false,
+  action: LoadingAction
+) => {
+  switch (action.type) {
+    case LoadingActionType.LOADING_TRUE:
+      localStorage.setItem("loading", true.toString());
+      return true;
+    case LoadingActionType.LOADING_FALSE:
+      localStorage.setItem("loading", false.toString());
+      return false;
     default:
       return state;
   }
