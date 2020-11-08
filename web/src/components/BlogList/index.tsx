@@ -17,13 +17,20 @@ const BlogList: React.FC = () => {
         type: LoadingActionType.LOADING_TRUE,
         payload: true,
       });
-      const response = await api.listBlogsBlogsGet(0, 100);
-      setBlogs(response.data);
-      dispatchLoading({
-        type: LoadingActionType.LOADING_FALSE,
-        payload: false,
-      });
+
+      try {
+        const response = await api.listBlogsBlogsGet(0, 100);
+        setBlogs(response.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        dispatchLoading({
+          type: LoadingActionType.LOADING_FALSE,
+          payload: false,
+        });
+      }
     };
+
     fetchData();
   }, [api, dispatchLoading]);
 

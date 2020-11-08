@@ -6,6 +6,8 @@ import marked from "marked";
 import hljs from "highlightjs";
 import "highlightjs/styles/vs.css";
 import { Container, Grid, Typography } from "@material-ui/core";
+import { useRootContext } from "../../context/index";
+import { LoadingActionType } from "../../action/type";
 
 hljs.initHighlightingOnLoad();
 
@@ -17,17 +19,33 @@ marked.setOptions({
 
 const Blog: React.FC = () => {
   const api = useApi();
+  const { dispatchLoading } = useRootContext();
+
   const { id } = useParams<{ id: string }>();
   const [blog, setBlog] = useState<ResBlog>();
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await api.getBlogBlogsBlogIdGet(Number(id));
-      setBlog(response.data);
+      try {
+        dispatchLoading({
+          type: LoadingActionType.LOADING_TRUE,
+          payload: true,
+        });
+
+        const response = await api.getBlogBlogsBlogIdGet(Number(id));
+        setBlog(response.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        dispatchLoading({
+          type: LoadingActionType.LOADING_FALSE,
+          payload: false,
+        });
+      }
     };
 
     fetchData();
-  }, [api, id]);
+  }, [api, dispatchLoading, id]);
 
   return (
     <Container>
