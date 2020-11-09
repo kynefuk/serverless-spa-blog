@@ -9,6 +9,7 @@ import "highlightjs/styles/vs.css";
 import { Button, makeStyles, TextField } from "@material-ui/core";
 import { RouteComponentProps, StaticContext, useHistory } from "react-router";
 import { useRootContext } from "../../context";
+import { LoadingActionType, ErrorActionType } from "../../action/type";
 
 marked.setOptions({
   highlight: function (code, lang) {
@@ -33,7 +34,7 @@ const Editor: React.FC<RouteComponentProps<
 >> = (props?) => {
   const api = useApi();
   const history = useHistory();
-  const { access } = useRootContext();
+  const { access, dispatchErrorMessage, dispatchLoading } = useRootContext();
   let blog: Blog | undefined;
   if (props?.location.state !== undefined) {
     blog = props.location.state.blog;
@@ -56,14 +57,33 @@ const Editor: React.FC<RouteComponentProps<
       },
     };
 
-    const response = await api.createBlogBlogsPost(
-      {
-        title: title,
-        content: markdown,
-      },
-      options
-    );
-    history.push(`/${response.data.id}`);
+    try {
+      dispatchLoading({
+        type: LoadingActionType.LOADING_TRUE,
+        payload: true,
+      });
+
+      const response = await api.createBlogBlogsPost(
+        {
+          title: title,
+          content: markdown,
+        },
+        options
+      );
+
+      history.push(`/${response.data.id}`);
+    } catch (err) {
+      console.error(err);
+      dispatchErrorMessage({
+        type: ErrorActionType.ADD_ERROR,
+        payload: err.message,
+      });
+    } finally {
+      dispatchLoading({
+        type: LoadingActionType.LOADING_FALSE,
+        payload: false,
+      });
+    }
   };
 
   const handleOnEdit = async (e: React.FormEvent<HTMLButtonElement>) => {
@@ -75,16 +95,33 @@ const Editor: React.FC<RouteComponentProps<
       },
     };
 
-    const response = await api.editBlogBlogsBlogIdPatch(
-      blog!.id,
-      {
-        title: title,
-        content: markdown,
-      },
-      options
-    );
+    try {
+      dispatchLoading({
+        type: LoadingActionType.LOADING_TRUE,
+        payload: true,
+      });
+      const response = await api.editBlogBlogsBlogIdPatch(
+        blog!.id,
+        {
+          title: title,
+          content: markdown,
+        },
+        options
+      );
 
-    history.push(`/${response.data.id}`);
+      history.push(`/${response.data.id}`);
+    } catch (err) {
+      console.error(err);
+      dispatchErrorMessage({
+        type: ErrorActionType.ADD_ERROR,
+        payload: err.message,
+      });
+    } finally {
+      dispatchLoading({
+        type: LoadingActionType.LOADING_FALSE,
+        payload: false,
+      });
+    }
   };
 
   const classes = useStyles();

@@ -4,12 +4,12 @@ import { Blog } from "../../api/api";
 import { List, ListItem, Container, Grid, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useRootContext } from "../../context";
-import { LoadingActionType } from "../../action/type";
+import { LoadingActionType, ErrorActionType } from "../../action/type";
 
 const BlogList: React.FC = () => {
   const api = useApi();
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  const { dispatchLoading } = useRootContext();
+  const { dispatchLoading, dispatchErrorMessage } = useRootContext();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +23,10 @@ const BlogList: React.FC = () => {
         setBlogs(response.data);
       } catch (err) {
         console.error(err);
+        dispatchErrorMessage({
+          type: ErrorActionType.ADD_ERROR,
+          payload: err.message,
+        });
       } finally {
         dispatchLoading({
           type: LoadingActionType.LOADING_FALSE,
@@ -32,7 +36,7 @@ const BlogList: React.FC = () => {
     };
 
     fetchData();
-  }, [api, dispatchLoading]);
+  }, [api, dispatchErrorMessage, dispatchLoading]);
 
   return (
     <Container>

@@ -19,21 +19,41 @@ import { Alert, AlertTitle } from "@material-ui/lab";
 import CloseIcon from "@material-ui/icons/Close";
 import { Link } from "react-router-dom";
 import { useRootContext } from "../../context";
+import { LoadingActionType, ErrorActionType } from "../../action/type";
 
 const Admin: React.FC = () => {
   const api = useApi();
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(true);
-  const { access } = useRootContext();
+  const { access, dispatchErrorMessage, dispatchLoading } = useRootContext();
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await api.listBlogsBlogsGet(0, 100);
-      setBlogs(response.data);
+      try {
+        dispatchLoading({
+          type: LoadingActionType.LOADING_TRUE,
+          payload: true,
+        });
+
+        const response = await api.listBlogsBlogsGet(0, 100);
+        setBlogs(response.data);
+      } catch (err) {
+        console.error(err);
+        dispatchErrorMessage({
+          type: ErrorActionType.ADD_ERROR,
+          payload: err.message,
+        });
+      } finally {
+        dispatchLoading({
+          type: LoadingActionType.LOADING_FALSE,
+          payload: false,
+        });
+      }
     };
+
     fetchData();
-  }, [api]);
+  }, [api, dispatchErrorMessage, dispatchLoading]);
 
   const handleOnDelete = async (blogId: number) => {
     const options = {
@@ -43,6 +63,10 @@ const Admin: React.FC = () => {
     };
 
     try {
+      dispatchLoading({
+        type: LoadingActionType.LOADING_TRUE,
+        payload: true,
+      });
       await api.deleteBlogBlogsBlogIdDelete(blogId, options);
       const deleted = blogs.filter((b) => {
         return b.id !== blogId;
@@ -52,6 +76,15 @@ const Admin: React.FC = () => {
       setMessage("削除しました。");
     } catch (error) {
       console.error(error);
+      dispatchErrorMessage({
+        type: ErrorActionType.ADD_ERROR,
+        payload: error.message,
+      });
+    } finally {
+      dispatchLoading({
+        type: LoadingActionType.LOADING_FALSE,
+        payload: false,
+      });
     }
   };
 

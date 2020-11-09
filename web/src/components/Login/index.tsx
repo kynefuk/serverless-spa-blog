@@ -14,7 +14,11 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useRootContext } from "../../context/index";
-import { AccessTokenActionType, ErrorActionType } from "../../action/type";
+import {
+  AccessTokenActionType,
+  ErrorActionType,
+  LoadingActionType,
+} from "../../action/type";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,7 +45,11 @@ const Login = () => {
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { dispatchAccessToken, dispatchErrorMessage } = useRootContext();
+  const {
+    dispatchAccessToken,
+    dispatchErrorMessage,
+    dispatchLoading,
+  } = useRootContext();
 
   const changeUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
@@ -64,6 +72,10 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      dispatchLoading({
+        type: LoadingActionType.LOADING_TRUE,
+        payload: true,
+      });
       const response = await api.loginForAccessTokenTokenPost(
         username,
         password
@@ -85,6 +97,11 @@ const Login = () => {
         payload: "認証情報が誤っています",
       });
       console.error(err);
+    } finally {
+      dispatchLoading({
+        type: LoadingActionType.LOADING_FALSE,
+        payload: false,
+      });
     }
   };
 

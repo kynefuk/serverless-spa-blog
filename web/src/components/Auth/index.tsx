@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { useHistory } from "react-router";
 import { useApi } from "../../hooks/api";
 import { useRootContext } from "../../context/index";
-import { LoadingActionType } from "../../action/type";
+import { LoadingActionType, ErrorActionType } from "../../action/type";
 
 const Auth: React.FC = ({ children }) => {
   const api = useApi();
   const history = useHistory();
-  const { access, dispatchLoading } = useRootContext();
+  const { access, dispatchLoading, dispatchErrorMessage } = useRootContext();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,6 +20,10 @@ const Auth: React.FC = ({ children }) => {
           access_token: access,
         });
       } catch (err) {
+        dispatchErrorMessage({
+          type: ErrorActionType.ADD_ERROR,
+          payload: err.message,
+        });
         history.push("/login");
       } finally {
         dispatchLoading({
@@ -29,7 +34,7 @@ const Auth: React.FC = ({ children }) => {
     };
 
     fetchData();
-  }, [access, api, dispatchLoading, history]);
+  }, [access, api, dispatchErrorMessage, dispatchLoading, history]);
 
   return <div>{children}</div>;
 };
