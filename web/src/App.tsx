@@ -13,7 +13,7 @@ function App() {
   const { loading } = useRootContext();
 
   return (
-    <div className="App">
+    <div>
       <Backdrop open={loading}>
         <CircularProgress color="inherit" />
       </Backdrop>

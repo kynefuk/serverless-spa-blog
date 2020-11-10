@@ -59,14 +59,18 @@ const Blog: React.FC = () => {
         alignItems="center"
         alignContent="center"
       >
-        <div id="content">
-          <Typography variant="h3" align="center">
+        <Grid item xs={12}>
+          <Typography
+            variant="h3"
+            align="center"
+            style={{ wordWrap: "break-word" }}
+          >
             {blog?.title}
           </Typography>
           <span
             dangerouslySetInnerHTML={{ __html: marked(blog?.content || "") }}
           />
-        </div>
+        </Grid>
       </Grid>
     </Container>
   );
