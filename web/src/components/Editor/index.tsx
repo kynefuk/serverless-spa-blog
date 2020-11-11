@@ -185,7 +185,10 @@ const Editor: React.FC<RouteComponentProps<
           </form>
           <SimpleMED onChange={(e) => setMarkdown(e)} />
           <div id="body">
-            <span dangerouslySetInnerHTML={{ __html: marked(markdown) }} />
+            <span
+              dangerouslySetInnerHTML={{ __html: marked(markdown) }}
+              style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}
+            />
           </div>
           <Button
             type="submit"
