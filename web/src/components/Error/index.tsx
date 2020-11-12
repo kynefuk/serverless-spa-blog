@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRootContext } from "../../context/index";
 import { IconButton, Collapse, Container } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
@@ -8,6 +8,10 @@ import { ErrorActionType } from "../../action/type";
 export const Error: React.FC = () => {
   const { error, dispatchErrorMessage } = useRootContext();
   const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    setOpen(true);
+  }, [error]);
 
   const handleOnClose = () => {
     setOpen(false);

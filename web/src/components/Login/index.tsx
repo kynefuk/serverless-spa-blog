@@ -51,6 +51,13 @@ const Login = () => {
     dispatchLoading,
   } = useRootContext();
 
+  useEffect(() => {
+    dispatchLoading({
+      type: LoadingActionType.LOADING_FALSE,
+      payload: false,
+    });
+  }, [dispatchLoading]);
+
   const changeUsernameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
     setUsername(value);
@@ -60,13 +67,6 @@ const Login = () => {
     const value = e.currentTarget.value;
     setPassword(value);
   };
-
-  useEffect(() => {
-    dispatchErrorMessage({
-      type: ErrorActionType.DELETE_ERROR,
-      payload: "",
-    });
-  }, [dispatchErrorMessage]);
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -94,9 +94,9 @@ const Login = () => {
     } catch (err) {
       dispatchErrorMessage({
         type: ErrorActionType.ADD_ERROR,
-        payload: "認証情報が誤っています",
+        payload: err.message,
       });
-      console.error(err);
+      console.log(err);
     } finally {
       dispatchLoading({
         type: LoadingActionType.LOADING_FALSE,

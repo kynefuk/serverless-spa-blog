@@ -16,7 +16,7 @@ export const AccessTokenReducer = (
       return access;
     case AccessTokenActionType.DELETE_TOKEN:
       localStorage.removeItem("access");
-      return state;
+      return "";
     default:
       return state;
   }
@@ -30,7 +30,7 @@ export const ErrorReducer = (state: string = "", action: ErrorAction) => {
       return error;
     case ErrorActionType.DELETE_ERROR:
       localStorage.removeItem("error");
-      return state;
+      return "";
     default:
       return state;
   }
@@ -48,6 +48,6 @@ export const LoadingReducer = (
       localStorage.setItem("loading", false.toString());
       return false;
     default:
-      return state;
+      return false;
   }
 };
