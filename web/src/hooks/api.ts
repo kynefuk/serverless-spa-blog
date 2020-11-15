@@ -5,7 +5,7 @@ export const useApi = () => {
   return useMemo(() => {
     const options = {
       baseOptions: {
-        timeout: 450000,
+        timeout: 600000,
       },
     };
     return new DefaultApi(options);
